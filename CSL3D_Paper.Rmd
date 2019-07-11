@@ -151,15 +151,15 @@ behavData %>%
 
 behavData %>%
   mutate(CompCond = ifelse(LateralityComp=="TC" | LateralityComp=="TL","TO", "TD")) %>%
-  filter(Procedure == "TaskC", Session != 2, CompCond == "TO") %>%
+  filter(Procedure == "TaskC",  CompCond == "TD", CompSearch.RT<1000) %>%
   mutate(Session = as.factor(Session)) %>%
   group_by(Group, Session, Block) %>%
   summarise(ResponseTime = mean(CompSearch.RT)) %>%
   ggplot(., aes(Block, ResponseTime, group = Group, fill=Group)) +
   #geom_point(aes(colour = Group)) +
-  geom_smooth(aes(colour = Group)) +
+  geom_smooth(aes(colour = Group), method = "lm") +
   #scale_y_continuous(limits = c(0,2000)) +
-  facet_grid(.~Session) +
+  facet_grid(.~Session, scales = "free") +
   theme_apa()
 
 behavData %>%
@@ -222,6 +222,7 @@ allData <- gather(allData, "sample", "voltage", gathercols, factor_key = TRUE)
 #Tidy variable names etc. and create any necessary variables - could use unite
 allData$sample <- as.integer(substring(allData$sample,2))
 allData <- allData %>% mutate(Hemisphere = ifelse(Hemifield==Hem, "Ipsilateral", "Contralateral"))
+allData$Session <- 1
 
 #clear stuff that I don't need
 rm(origEpochInfo,scalpData)
@@ -272,14 +273,188 @@ day3Data <- gather(day3Data, "sample", "voltage", gathercols, factor_key = TRUE)
 #Tidy variable names etc. and create any necessary variables - could use unite
 day3Data$sample <- as.integer(substring(day3Data$sample,2))
 day3Data <- day3Data %>% mutate(Hemisphere = ifelse(Hemifield==Hem, "Ipsilateral", "Contralateral"))
+day3Data$Session <- 3
 
 #clear stuff that I don't need
 rm(origEpochInfo,scalpData)
 
 allData <- rbind(allData, day3Data)
 
-rm(day3Data)
+rm(day3Data, epochInfo, lHemData, rHemData)
 
+groupData <- read.table("Behaviour/CSL3D_GroupInfo.csv",header = TRUE, sep=",")
+for (Subj in c(1:39)) {
+    allData$Group[allData$Subject==Subj] = groupData$Group[groupData$Subject==Subj]
+}
+allData$Group <- as.factor(allData$Group)
+levels(allData$Group) <- c("CC","CS","SC","SS")
+
+allData <-  mutate(allData, Group1 = substr(allData$Group,1,1))
+allData <-  mutate(allData, Group2 = substr(allData$Group,2,2))
+allData <-  mutate(allData, GroupP = ifelse(Group1 == Group2, "Stay", "Switch"))
+allData <-  mutate(allData, Contra = ifelse(Hemifield == Hem, "Ipsilateral", "Contralateral"))
+```
+
+```{r setParams}
+baseline = 200
+plotWidth = 24
+plotHeight = 9
+
+NtStart = 185
+NtEnd = 250
+PdStart = 250
+PdEnd = 350
+```
+
+```{r}
+
+allData %>%
+  filter(Event == "Learn", Session == 1, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,Group1) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = Group1),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Learn", Session == 3, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,Group2) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = Group2),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Learn", Session == 1, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,GroupP) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = GroupP),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Learn", Session == 3, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,GroupP) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = GroupP),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+```
+
+
+```{r}
+
+allData %>%
+  filter(Event == "Search", Session == 1, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,Group1) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = Group1),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Search", Session == 3, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,Group2) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = Group2),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Search", Session == 1, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,GroupP) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = GroupP),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
+
+allData %>%
+  filter(Event == "Search", Session == 3, LatStim != "None") %>%
+  mutate(sample = sample*2-baseline) %>%
+  group_by(LatStim,sample,Contra,GroupP) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_line(aes(colour = GroupP),size=0.5) +
+    scale_colour_brewer(palette = "Set1") +
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(LatStim~.) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(2, "lines"), text= element_text(size=12))
 ```
 
 \newpage
