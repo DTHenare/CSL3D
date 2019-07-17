@@ -177,8 +177,11 @@ behavData %>%
   geom_bar(position = "dodge", stat = "identity") +
   facet_grid(.~Group) +
   geom_errorbar(aes(ymin = ResponseTime-se, ymax = ResponseTime+se), width = .2, position = position_dodge(.9)) +
-  coord_cartesian(ylim=c(400,800))+
-  theme_apa()
+  scale_fill_manual(values=c("red4", "gray42"))+
+  coord_cartesian(ylim=c(500,800))+
+  theme_apa() +
+  theme(legend.position = "None",
+        axis.line = element_line(colour = "black"))
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1) %>%
@@ -186,12 +189,12 @@ behavData %>%
   group_by(Group, Session, CompCond, Subject) %>%
   summarise(ResponseTime = mean(CompSearch.RT)) %>%
   spread(CompCond, ResponseTime) %>%
-  mutate(DistractorInterference = TD - TO) %>%
+  mutate(DistractorInterference = TO - TD) %>%
   mutate(se = sd(DistractorInterference)/9) %>%
   group_by(Group, Session) %>%
   summarise(DistractorInterference = mean(DistractorInterference), se = mean(se)) %>%
   ggplot(., aes(Session, DistractorInterference)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", fill = "orange1") +
   facet_grid(.~Group) +
   geom_errorbar(aes(ymin = DistractorInterference-se, ymax = DistractorInterference+se), width = .2) +
   theme_apa()
