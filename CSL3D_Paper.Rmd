@@ -333,6 +333,7 @@ epochInfo$Subject = as.factor(epochInfo$Subject)
 
 #clear stuff that I don't need
 rm(curEpochInfo,curLHemData,curRHemData, fPrefix, eFileList, eFilePattern, lFileList, lFilePattern, rFileList, rFilePattern, subj, groupdata)
+gc()
 #####
 #Permutation can be done at this stage using epochInfo$Hemifield = sample(epochInfo$Hemifield, replace=FALSE)
 #combine all the data together into one long table
@@ -351,16 +352,22 @@ allData <- allData %>% mutate(Contra = ifelse(Hemifield==Hem, "Ipsilateral", "Co
 allData <- allData %>% mutate(Stimulus = as.factor(paste(LatStim," (",MidStim," mid)", sep = "")))
 
 #clear stuff that I don't need
-rm(origEpochInfo,scalpData)
+rm(origEpochInfo,scalpData,epochInfo, lHemData, rHemData)
+gc()
 #Change factor labels
 allData <-  mutate(allData, Group1 = substr(allData$Group,1,1))
 allData <-  mutate(allData, Group2 = substr(allData$Group,2,2))
-allData <-  mutate(allData, GroupP = ifelse(Group1 == Group2, "Stay", "Switch"))
+allData <-  mutate(allData, GroupP = ifelse(Group1 == Group2, "Unchanged", "Changed"))
 allData <-  mutate(allData, Contra = ifelse(Hemifield == Hem, "Ipsilateral", "Contralateral"))
 
 allData$Group = factor(allData$Group, labels = c("Colour-Colour", "Colour-Shape", "Shape-Colour", "Shape-Shape"))
-allData$Group = factor(allData$Group, levels = c("Colour-Colour", "Colour-Shape", "Shape-Shape", "Shape-Colour"))
+allData$Group = factor(allData$Group, levels = c("Colour-Colour", "Shape-Colour", "Shape-Shape", "Colour-Shape"))
 allData$Stimulus = factor(allData$Stimulus, levels = c("Color (Shape mid)", "Shape (Color mid)", "Target (None mid)", "Target (Distractor mid)", "Distractor (Target mid)","None (Target mid)"))
+allData$Group  <- as.factor(allData$Group)
+allData$Group1 <- as.factor(allData$Group1)
+allData$Group2 <- as.factor(allData$Group2)
+allData$GroupP <- as.factor(allData$GroupP)
+gc()
 ```
 
 ```{r setParams}
@@ -601,17 +608,20 @@ allData %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral) %>%
   ggplot(., aes(sample,diff)) +
-    geom_rect(aes(xmin = NtStart, xmax = NtEnd, ymin = -Inf, ymax = 0), fill = "mistyrose1") + 
-    geom_rect(aes(xmin = PdStart, xmax = PdEnd, ymin = 0, ymax = Inf), fill = "mistyrose1") +
+    geom_rect(aes(xmin = NtStart, xmax = NtEnd, ymin = -Inf, ymax = 0), fill = "lemonchiffon") + 
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),aes(xmin = PdStart, xmax = PdEnd, ymin = 0, ymax = Inf), fill = "lemonchiffon") +
     geom_line(aes(colour = Group1),size=3) +
-    scale_colour_brewer(palette = "Set1") +
+    scale_color_manual(values=c("green4", "gray42"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    coord_cartesian(ylim=c(-2,2))+
     facet_grid(.~Stimulus) +
     geom_vline(xintercept = 0,linetype = "dashed" ) +
     geom_hline(yintercept = 0,linetype = "dashed") +
     theme_apa() +
-    theme(panel.spacing.y = unit(10, "lines"), text= element_text(size=50))
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50),
+          legend.position = "None")
 ggsave("searchDay1.pdf", width = 40, height = 10)
 #####
 allData %>%
@@ -725,25 +735,144 @@ allData %>%
 ggsave("indvSubj.pdf", width = 20, height = 45)
 #####
 allData %>%
-  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16) %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Group == "Colour-Colour" | Group == "Shape-Shape") %>%
   mutate(sample = sample-baseline) %>%
   group_by(Session, Stimulus,sample,Contra,Group) %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral) %>%
   ggplot(., aes(sample,diff)) +
-      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "mistyrose1") +
-    geom_rect(xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "mistyrose1") +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
     geom_line(aes(colour = Session),size=3) +
-    scale_colour_brewer(palette = "Set1") +
+    scale_color_manual(values=c("gray42", "royalblue"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
     facet_grid(Group~Stimulus) +
     geom_vline(xintercept = 0,linetype = "dashed" ) +
     geom_hline(yintercept = 0,linetype = "dashed") +
     theme_apa() +
-    theme(panel.spacing.y = unit(10, "lines"), text= element_text(size=50))
-ggsave("searchAll.pdf", width = 40, height = 30)
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50),
+          legend.position = "None")
+ggsave("searchAlltraining.pdf", width = 40, height = 20)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Group == "Colour-Colour" | Group == "Shape-Colour") %>%
+  mutate(sample = sample-baseline) %>%
+  group_by(Session, Stimulus,sample,Contra,Group) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_line(aes(colour = Session),size=3) +
+    scale_color_manual(values=c("gray42", "royalblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group~Stimulus) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50),
+          legend.position = "None")
+ggsave("searchAllColourFinishers.pdf", width = 40, height = 20)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Group == "Shape-Shape" | Group == "Colour-Shape") %>%
+  mutate(sample = sample-baseline) %>%
+  group_by(Session, Stimulus,sample,Contra,Group) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_line(aes(colour = Session),size=3) +
+    scale_color_manual(values=c("gray42", "royalblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group~Stimulus) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50),
+          legend.position = "None")
+ggsave("searchAllShapeFinishers.pdf", width = 40, height = 20)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Session == "Day3") %>%
+  mutate(sample = sample-baseline) %>%
+  group_by(Session, Stimulus,sample,Contra,GroupP,Group2) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_line(aes(colour = GroupP),size=3) +
+    scale_color_manual(values=c("navyblue", "dodgerblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group2~Stimulus) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50)
+          #,legend.position = "None"
+          )
+ggsave("search3HistoryChange.pdf", width = 40, height = 20)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16) %>%
+  mutate(sample = sample-baseline, CatStim = as.factor(ifelse(Group1==Group2,Group1,Group2))) %>%
+  group_by( Stimulus,sample,Contra,GroupP,CatStim) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_line(aes(colour = GroupP),size=3) +
+    scale_color_manual(values=c("gray42", "dodgerblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(CatStim~Stimulus) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50)
+          #,legend.position = "None"
+          )
+ggsave("search1and3HistoryChange.pdf", width = 40, height = 20)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Session == 3) %>%
+  mutate(sample = sample-baseline) %>%
+  group_by(Session, Stimulus,sample,Contra,Group) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+      geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_line(aes(colour = Session),size=3) +
+    scale_color_manual(values=c("black", "royalblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group~Stimulus) +
+    geom_vline(xintercept = 0,linetype = "dashed" ) +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    theme_apa() +
+    theme(panel.spacing.y = unit(10, "lines"), 
+          text= element_text(size=50),
+          legend.position = "None")
+ggsave("search3.pdf", width = 40, height = 20)
 
 allData %>%
   filter(Event == "Learn",  LatStim != "None", Subject != 20, Subject !=16) %>%
