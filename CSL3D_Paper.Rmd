@@ -910,6 +910,88 @@ allData %>%
     theme(panel.spacing.y = unit(10, "lines"), text= element_text(size=12))
 ```
 
+```{r PDBehaviour}
+PDAmp <- allData %>%
+  filter(Event == "Search", Subject != 20 & Subject != 16 & Subject != 37 & Subject != 38 & Subject != 39, Stimulus == "Distractor (Target mid)") %>%
+  mutate(sample = sample-baseline) %>%
+  filter(sample>PdStart & sample <PdEnd) %>%
+  group_by(Session,Subject,Contra,Group, Stimulus) %>%
+  summarise(mV = mean(voltage)) %>%
+  spread(Contra, mV) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  arrange(Subject)
+distBehav <- behavData %>%
+  filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1,Subject != 20 & Subject != 16) %>%
+  mutate(Session = as.factor(Session), CompCond = ifelse(LateralityComp=="TC" | LateralityComp=="TL","TO", "TD")) %>%
+  group_by(Group, Session, CompCond, Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT)) %>%
+  spread(CompCond, ResponseTime) %>%
+  mutate(DistractorInterference = TD - TO) %>%
+  arrange(Subject)
+pdBehav <- cbind(PDAmp,distBehav)
+
+#Pd in general related to distractor costs in general
+cor.test(pdBehav$diff, pdBehav$DistractorInterference)
+pdBehav %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point(size = 3) +
+  #geom_line(aes(colour = Group))+
+  theme_apa() 
+pdBehav %>%
+  filter(Group=="Colour-Colour") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point(size = 4) +
+  geom_line(aes(colour = Group))+
+  theme_apa()
+pdBehav %>%
+  filter(Group=="Shape-Shape") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point(size = 4) +
+  geom_line(aes(colour = Group))+
+  theme_apa()
+pdBehav %>%
+  filter(Group=="Shape-Colour") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point(size = 4) +
+  geom_line(aes(colour = Group))+
+  theme_apa()
+pdBehav %>%
+  filter(Group=="Colour-Shape") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point(size = 4) +
+  geom_line(aes(colo4ur = Group))+
+  theme_apa()
+
+pdBehav %>%
+  filter(Session=="Day1") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point() +
+  geom_line()+
+  theme_apa()+
+  theme(legend.position = "None")
+pdBehav %>%
+  filter(Session=="Day3") %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
+  geom_point() +
+  geom_line()+
+  theme_apa()+
+  theme(legend.position = "None")
+
+#Pd diff across sessions related to cost diff across sessions
+PDAmp <- PDAmp %>% select(-c(Stimulus,Contralateral,Ipsilateral)) %>% spread(Session, diff)
+PDAmp$pdXsess = PDAmp$Day1 - PDAmp$Day3
+distBehav <- distBehav %>% select(-c(TD,TO)) %>% spread(Session, DistractorInterference) 
+distBehav$costXsess = distBehav$`1`- distBehav$`3`
+
+cor.test(PDAmp$pdXsess,distBehav$costXsess)
+
+pdBehav <- cbind(PDAmp,distBehav)
+pdBehav %>%
+  ggplot(aes(x = costXsess, y = pdXsess)) +
+  geom_point() +
+  theme_apa()
+```
+
 ```{r searchStats}
 #Nt
 nt.search.day1 <- allData %>%
