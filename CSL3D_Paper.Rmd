@@ -189,15 +189,21 @@ behavData %>%
   group_by(Group, Session, CompCond, Subject) %>%
   summarise(ResponseTime = mean(CompSearch.RT)) %>%
   spread(CompCond, ResponseTime) %>%
-  mutate(DistractorInterference = TO - TD) %>%
+  mutate(DistractorInterference = TD - TO) %>%
   mutate(se = sd(DistractorInterference)/9) %>%
   group_by(Group, Session) %>%
   summarise(DistractorInterference = mean(DistractorInterference), se = mean(se)) %>%
   ggplot(., aes(Session, DistractorInterference)) +
-  geom_bar(stat = "identity", fill = "orange1") +
+  geom_bar(stat = "identity", fill = "turquoise4") +
   facet_grid(.~Group) +
   geom_errorbar(aes(ymin = DistractorInterference-se, ymax = DistractorInterference+se), width = .2) +
-  theme_apa()
+  theme_apa() +
+  theme(text= element_blank(),
+          strip.text.y = element_blank(),
+          strip.text.x = element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          legend.position = "None")
 
 behavData %>%
   #filter(Group == "CC" ) %>%
@@ -852,7 +858,7 @@ allData %>%
 ggsave("search1and3HistoryChange.pdf", width = 40, height = 20)
 
 allData %>%
-  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Session == 3) %>%
+  filter(Event == "Search",  LatStim != "None", Subject != 20, Subject !=16, Session == "Day3") %>%
   mutate(sample = sample-baseline) %>%
   group_by(Session, Stimulus,sample,Contra,Group) %>%
   summarise(mean = mean(voltage)) %>%
@@ -913,6 +919,96 @@ allData %>%
     theme(panel.spacing.y = unit(10, "lines"), text= element_text(size=12))
 ```
 
+```{r}
+allData %>%
+    filter(Event == "Search",  LatStim != "None", Stimulus != "Target (None mid)", Subject != 20, Subject !=16, Group == "Colour-Colour" | Group == "Shape-Shape") %>%
+    mutate(sample = sample-baseline) %>%
+    group_by(Session, Stimulus,sample,Contra,Group) %>%
+    summarise(mean = mean(voltage)) %>%
+    spread(Contra, mean) %>% 
+    mutate(diff = Contralateral - Ipsilateral) %>%
+    ggplot(., aes(sample,diff)) +
+    geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0,aes(colour= "gray") ) +
+    geom_hline(yintercept = 0,aes(colour= "gray") ) +
+    #geom_line( aes(colour = interaction(Group,Session)),size=3) +
+    geom_line(data = . %>% filter(Session == "Day1"), aes(colour = Group),size=3) +
+    #geom_line(data = . %>% filter(Session == "Day3"), aes(colour = Group),linetype="dashed",size=3) +
+    scale_color_manual(values=c("seagreen3", "gray52"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,50)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa() +
+    theme(panel.spacing.x = unit(10, "lines"), 
+          text= element_blank(),
+          strip.text.y = element_blank(),
+          strip.text.x = element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          legend.position = "None")
+ggsave("posterDay1.pdf", width = 30, height = 8)
+
+allData %>%
+    filter(Event == "Search",  LatStim != "None", Stimulus != "Target (None mid)", Subject != 20, Subject !=16, Group == "Colour-Colour" | Group == "Shape-Shape") %>%
+    mutate(sample = sample-baseline) %>%
+    group_by(Session, Stimulus,sample,Contra,Group) %>%
+    summarise(mean = mean(voltage)) %>%
+    spread(Contra, mean) %>% 
+    mutate(diff = Contralateral - Ipsilateral) %>%
+    ggplot(., aes(sample,diff)) +
+    geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0,aes(colour= "gray") ) +
+    geom_hline(yintercept = 0,aes(colour= "gray") ) +
+    geom_line( aes(colour = interaction(Group,Session)),size=3) +
+    #geom_line(data = . %>% filter(Session == "Day1"), aes(colour = Group),size=3) +
+    #geom_line(data = . %>% filter(Session == "Day3"), aes(colour = Group),linetype="dashed",size=3) +
+    scale_color_manual(values=c("seagreen3", "gray52", "seagreen4", "gray42"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,50)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa() +
+    theme(panel.spacing.x = unit(10, "lines"), 
+          text= element_blank(),
+          strip.text.y = element_blank(),
+          strip.text.x = element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          legend.position = "None")
+ggsave("posterTrainingEffect.pdf", width = 30, height = 8)
+
+allData %>%
+  filter(Event == "Search",  LatStim != "None", Stimulus != "Target (None mid)", Subject != 20, Subject !=16, Session == "Day3") %>%
+  mutate(sample = sample-baseline) %>%
+  group_by(Session, Stimulus,sample,Contra,GroupP,Group2) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral) %>%
+  ggplot(., aes(sample,diff)) +
+    geom_rect(xmin = NtStart, xmax = NtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = PdStart, xmax = PdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    geom_line(aes(colour = GroupP),size=3) +
+    scale_color_manual(values=c("navyblue", "dodgerblue"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,50)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa() +
+    theme(panel.spacing.x = unit(10, "lines")
+          ,text= element_blank()
+          ,legend.position = "None"
+          ,strip.text.y = element_blank()
+          ,strip.text.x = element_blank()
+          ,axis.title.x=element_blank()
+          ,axis.title.y=element_blank()
+          ,axis.text.x=element_text(vjust = 10)
+          )
+ggsave("posterRetrainEffect.pdf", width = 30, height = 8)
+
+```
+
 ```{r PDBehaviour}
 PDAmp <- allData %>%
   filter(Event == "Search", Subject != 20 & Subject != 16 & Subject != 37 & Subject != 38 & Subject != 39, Stimulus == "Distractor (Target mid)") %>%
@@ -937,9 +1033,30 @@ pdBehav <- cbind(PDAmp,distBehav)
 cor.test(pdBehav$diff, pdBehav$DistractorInterference)
 pdBehav %>%
   ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
-  geom_point(size = 3) +
-  #geom_line(aes(colour = Group))+
-  theme_apa() 
+  geom_point(data = . %>% filter(Group == "Colour-Colour"),shape = 16,size = 5) +
+  geom_point(data = . %>% filter(Group == "Colour-Shape"),shape = 17,size = 5) +
+  geom_point(data = . %>% filter(Group == "Shape-Colour"),shape = 15,size = 5) +
+  geom_point(data = . %>% filter(Group == "Shape-Shape"),shape = 18,size = 5) +
+  theme_apa() +
+  theme(text= element_blank(),
+          strip.text.y = element_blank(),
+          strip.text.x = element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          legend.position = "None")
+pdBehav %>%
+  ggplot( aes(x=DistractorInterference,y=diff, colour = interaction(Session,Group))) +
+  geom_smooth(data = . %>% filter(Group == "Colour-Colour"),method = "lm", se=FALSE) +
+  geom_smooth(data = . %>% filter(Group == "Colour-Shape"),method = "lm", se=FALSE) +
+  geom_smooth(data = . %>% filter(Group == "Shape-Colour"),method = "lm", se=FALSE) +
+  geom_smooth(data = . %>% filter(Group == "Shape-Shape"),method = "lm", se=FALSE) +
+  theme_apa() +
+  theme(text= element_blank(),
+          strip.text.y = element_blank(),
+          strip.text.x = element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          legend.position = "None")
 pdBehav %>%
   filter(Group=="Colour-Colour") %>%
   ggplot( aes(x=DistractorInterference,y=diff, colour = Session, group = Subject)) +
@@ -988,8 +1105,8 @@ distBehav$costXsess = distBehav$`1`- distBehav$`3`
 
 cor.test(PDAmp$pdXsess,distBehav$costXsess)
 
-pdBehav <- cbind(PDAmp,distBehav)
-pdBehav %>%
+PDAmp <- cbind(PDAmp,distBehav)
+PDAmp %>%
   ggplot(aes(x = costXsess, y = pdXsess)) +
   geom_point() +
   theme_apa()
