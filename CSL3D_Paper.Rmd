@@ -134,6 +134,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
+ggsave('Figures/Behav1.jpg',width=5, height=4, units="in", dpi = 300)
 
 behavData %>%
   filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC==1) %>%
@@ -149,6 +150,7 @@ behavData %>%
   geom_errorbar(aes(ymin = ResponseTime-se, ymax = ResponseTime+se), width = .2) +
   coord_cartesian(ylim=c(400,800))+
   theme_apa()
+ggsave('Figures/Behav2.jpg',width=5, height=4, units="in", dpi = 300)
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2) %>%
@@ -164,6 +166,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2, position=position_dodge(.9)) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
+ggsave('Figures/Behav3.jpg',width=5, height=4, units="in", dpi = 300)
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1) %>%
@@ -180,8 +183,9 @@ behavData %>%
   scale_fill_manual(values=c("red4", "gray42"))+
   coord_cartesian(ylim=c(500,800))+
   theme_apa() +
-  theme(legend.position = "None",
+  theme(#legend.position = "None",
         axis.line = element_line(colour = "black"))
+ggsave('Figures/Behav4.jpg',width=5, height=4, units="in", dpi = 300)
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1) %>%
@@ -204,32 +208,6 @@ behavData %>%
           axis.title.x=element_blank(),
           axis.title.y=element_blank(),
           legend.position = "None")
-
-behavData %>%
-  #filter(Group == "CC" ) %>%
-  mutate(CompCond = ifelse(LateralityComp=="TC" | LateralityComp=="TL","TO", "TD")) %>%
-  filter(Procedure == "TaskC",  CompCond == "TD", CompSearch.RT<1000) %>%
-  mutate(Session = as.factor(Session)) %>%
-  group_by(Group, Session, Block) %>%
-  summarise(ResponseTime = mean(CompSearch.RT)) %>%
-  ggplot(., aes(Block, ResponseTime, group = Group, fill=Group)) +
-  #geom_point(aes(colour = Group)) +
-  geom_smooth(aes(Group = Group,colour = Group), method = "lm") +
-  #scale_y_continuous(limits = c(0,2000)) +
-  facet_grid(.~Session, scales = "free") +
-  theme_apa()
-
-behavData %>%
-  filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC == 1) %>%
-  mutate(Session = as.factor(Session)) %>%
-  group_by(Group, Session, Block) %>%
-  summarise(ResponseTime = mean(LearnSearch.RT)) %>%
-  ggplot(., aes(Block, ResponseTime, group = Group, fill=Group)) +
-  geom_point(aes(colour = Group)) +
-  facet_grid(Group~Session) +
-  geom_smooth() +
-  scale_y_continuous(limits = c(0,2000)) +
-  theme_apa()
 ```
 
 ```{r behavStats}
@@ -524,6 +502,7 @@ allData %>%
     theme(panel.spacing.y = unit(10, "lines"), text= element_text(size=50))
 ggsave("learnAll.pdf", width = 40, height = 30)
 ```
+
 ```{r learnStats}
 #Nt
 nt.learn.day1 <- allData %>%
