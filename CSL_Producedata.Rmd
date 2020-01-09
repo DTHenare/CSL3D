@@ -62,6 +62,17 @@ behavData$Group = factor(behavData$Group, labels = c("Colour-Colour", "Colour-Sh
 #behavData$Group = factor(behavData$Group, levels = c("Colour-Colour", "Colour-Shape", "Shape-Shape", "Shape-Colour"))
 ```
 
+```{r summaryTables, include=FALSE}
+behavData %>% 
+  group_by(Subject, Session) %>%
+  summarise(numTrials = sum(Count)) %>%
+  spread(Session, numTrials)
+
+behavData %>%
+  group_by(Subject, Group) %>%
+  summarise(numTrials = sum(Count))
+```
+
 ```{r behavStats}
 cat.acc <- behavData %>%
   filter(Procedure == "TaskL", Session != 2) %>%
@@ -129,7 +140,7 @@ distint.emmeans <- emmeans(distint.aov, ~Group*Session)
 distint.posthoc <- pairs(distint.emmeans)
 
 
-save(cat.acc.aov, cat.rt.aov, srch.acc.aov, srch.rt.aov, distint.posthoc, file = "behavANOVAs.RData")
+save(cat.acc.aov, cat.rt.aov, srch.acc.aov, srch.rt.aov, distint.posthoc, file = "DataOutput/behavANOVAs.RData")
 ```
 
 ```{r behavPlots}
