@@ -63,7 +63,7 @@ behavData$Group = factor(behavData$Group, labels = c("Colour-Colour", "Colour-Sh
 behavData <- behavData %>% filter(ExperimentName != "CSL 3D Tag1 šbung")
 behavData <- behavData %>% mutate(CompSearch.RT = ifelse(is.na(CompSearch.RT), 2000,CompSearch.RT))
 behavData <- behavData %>% separate(Group, c("InitSess", "FinSess"), remove = FALSE) %>%
-mutate(Session = as.factor(Session), retrain = ifelse(InitSess == FinSess, "Stay", "Switch"), CompCond = ifelse(LateralityComp=="TC" | LateralityComp=="TL","TO", "TD"))
+mutate(Session = as.factor(Session), retrain = ifelse(InitSess == FinSess, "Stay", "Switch"), CompCond = ifelse(LateralityComp=="TC" | LateralityComp=="TL","TO", "TD"), InitSess = as.factor(InitSess), FinSess = as.factor(FinSess))
 ```
 
 ```{r summaryTables, include=FALSE}
@@ -130,7 +130,7 @@ cat.rt.aov <- aov_ez(data = cat.rt,
                             )
 
 srch.acc <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2) %>%
+  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
   group_by(Group, Session, CompCond,Subject) %>%
   summarise(Accuracy = mean(CompSearch.ACC))
 srch.acc.aov <- aov_ez(data = srch.acc,
@@ -236,6 +236,47 @@ distint.posthoc <- pairs(distint.emmeans)
 
 save(cat.acc.aov, cat.rt.aov, srch.acc.aov, srch.rt.aov, distint.posthoc, file = "DataOutput/behavANOVAs.RData")
 ```
+
+```{r behavInitTraining}
+cat.acc.init <- behavData %>%
+  filter(Procedure == "TaskL", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
+  group_by(InitSess,Subject) %>%
+  summarise(Accuracy = mean(LearnSearch.ACC))
+cat.acc.init.aov <- aov_ez(data = cat.acc.init,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            between = c("InitSess")
+                            )
+cat.rt.init <- behavData %>%
+  filter(Procedure == "TaskL", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, LearnSearch.ACC == 1) %>%
+  group_by(InitSess,Subject) %>%
+  summarise(ResponseTime = mean(LearnSearch.RT))
+cat.rt.init.aov <- aov_ez(data = cat.rt.init,
+                          dv = "ResponseTime",
+                          id = "Subject",
+                          between = c("InitSess")
+                          )
+srch.acc.init <- behavData %>%
+  filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
+  group_by(InitSess,Subject) %>%
+  summarise(Accuracy = mean(CompSearch.ACC))
+srch.acc.init.aov <- aov_ez(data = srch.acc.init,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            between = c("InitSess")
+                            )
+srch.rt.init <- behavData %>%
+  filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
+  group_by(InitSess,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT))
+srch.rt.init.aov <- aov_ez(data = srch.rt.init,
+                           dv = "ResponseTime",
+                           id = "Subject",
+                           between = c("InitSess")
+                           )
+  
+```
+
 
 ```{r behavPlots}
 behavData %>%
