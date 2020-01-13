@@ -106,137 +106,6 @@ alltrials %>%
   summarise(twomean = mean(twoPerc), threemean = mean(threePerc))
 ```
 
-
-```{r behavStats2x4}
-cat.acc <- behavData %>%
-  filter(Procedure == "TaskL", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(Group,Session,Subject) %>%
-  summarise(Accuracy = mean(LearnSearch.ACC)*100)
-cat.acc.aov <- aov_ez(data = cat.acc,
-                            dv = "Accuracy",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("Group")
-                            )
-cat.rt <- behavData %>%
-  filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(Group, Session,Subject) %>%
-  summarise(ResponseTime = mean(LearnSearch.RT))
-cat.rt.aov <- aov_ez(data = cat.rt,
-                            dv = "ResponseTime",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("Group")
-                            )
-
-srch.acc <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(Group, Session, CompCond,Subject) %>%
-  summarise(Accuracy = mean(CompSearch.ACC))
-srch.acc.aov <- aov_ez(data = srch.acc,
-                            dv = "Accuracy",
-                            id = "Subject",
-                            within = c("Session","CompCond"),
-                            between = c("Group")
-                            )
-
-srch.rt <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(Group, Session, CompCond,Subject) %>%
-  summarise(ResponseTime = mean(CompSearch.RT))
-srch.rt.aov <- aov_ez(data = srch.rt,
-                            dv = "ResponseTime",
-                            id = "Subject",
-                            within = c("Session","CompCond"),
-                            between = c("Group")
-                            )
-srch.rt.emmeans <- emmeans(srch.rt.aov, ~Group*Session*CompCond)
-srch.rt.posthoc <- pairs(srch.rt.emmeans)
-
-distint <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(Group, Session, CompCond, Subject) %>%
-  summarise(ResponseTime = mean(CompSearch.RT)) %>%
-  spread(CompCond, ResponseTime) %>%
-  mutate(DistractorInterference = TD - TO)
-distint.aov <- aov_ez(data = distint,
-                            dv = "DistractorInterference",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("Group")
-                            )
-distint.emmeans <- emmeans(distint.aov, ~Group*Session)
-distint.posthoc <- pairs(distint.emmeans)
-
-
-save(cat.acc.aov, cat.rt.aov, srch.acc.aov, srch.rt.aov, distint.posthoc, file = "DataOutput/behavANOVAs.RData")
-```
-
-```{r behavANOVAs2x2x2}
-cat.acc <- behavData %>%
-  filter(Procedure == "TaskL", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,retrain,Session, Subject) %>%
-  summarise(Accuracy = mean(LearnSearch.ACC)*100)
-cat.acc.aov <- aov_ez(data = cat.acc,
-                            dv = "Accuracy",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("InitSess", "retrain")
-                            )
-cat.rt <- behavData %>%
-  filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,retrain,Session, Subject) %>%
-  summarise(ResponseTime = mean(LearnSearch.RT))
-cat.rt.aov <- aov_ez(data = cat.rt,
-                            dv = "ResponseTime",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("InitSess", "retrain")
-                            )
-
-srch.acc <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,retrain,Session, Subject, CompCond) %>%
-  summarise(Accuracy = mean(CompSearch.ACC))
-srch.acc.aov <- aov_ez(data = srch.acc,
-                            dv = "Accuracy",
-                            id = "Subject",
-                            within = c("Session","CompCond"),
-                            between = c("InitSess", "retrain")
-                            )
-
-srch.rt <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,retrain,Session, Subject, CompCond) %>%
-  summarise(ResponseTime = mean(LearnSearch.RT))
-srch.rt.aov <- aov_ez(data = srch.rt,
-                            dv = "ResponseTime",
-                            id = "Subject",
-                            within = c("Session","CompCond"),
-                            between = c("InitSess", "retrain")
-                            )
-srch.rt.emmeans <- emmeans(srch.rt.aov, ~Group*Session*CompCond)
-srch.rt.posthoc <- pairs(srch.rt.emmeans)
-
-distint <- behavData %>%
-  filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,retrain,Session, Subject, CompCond) %>%
-  summarise(ResponseTime = mean(CompSearch.RT)) %>%
-  spread(CompCond, ResponseTime) %>%
-  mutate(DistractorInterference = TD - TO)
-distint.aov <- aov_ez(data = distint,
-                            dv = "DistractorInterference",
-                            id = "Subject",
-                            within = c("Session"),
-                            between = c("InitSess", "retrain")
-                            )
-distint.emmeans <- emmeans(distint.aov, ~InitSess*retrain*Session)
-distint.posthoc <- pairs(distint.emmeans)
-
-
-save(cat.acc.aov, cat.rt.aov, srch.acc.aov, srch.rt.aov, distint.posthoc, file = "DataOutput/behavANOVAs.RData")
-```
-
 ```{r behavInitTraining}
 cat.acc.init <- behavData %>%
   filter(Procedure == "TaskL", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -258,25 +127,150 @@ cat.rt.init.aov <- aov_ez(data = cat.rt.init,
                           )
 srch.acc.init <- behavData %>%
   filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
-  group_by(InitSess,Subject) %>%
+  group_by(InitSess,CompCond,Subject) %>%
   summarise(Accuracy = mean(CompSearch.ACC))
 srch.acc.init.aov <- aov_ez(data = srch.acc.init,
                             dv = "Accuracy",
                             id = "Subject",
+                            within = c("CompCond"),
                             between = c("InitSess")
                             )
 srch.rt.init <- behavData %>%
   filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
-  group_by(InitSess,Subject) %>%
+  group_by(InitSess,CompCond,Subject) %>%
   summarise(ResponseTime = mean(CompSearch.RT))
 srch.rt.init.aov <- aov_ez(data = srch.rt.init,
                            dv = "ResponseTime",
                            id = "Subject",
+                           within = c("CompCond"),
                            between = c("InitSess")
                            )
-  
+distint.init <- behavData %>%
+  filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
+  group_by(InitSess,CompCond,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT)) %>%
+  spread(CompCond, ResponseTime) %>%
+  mutate(DistractorInterference = TD - TO)
+distint.init.aov <- aov_ez(data = distint.init,
+                           dv = "DistractorInterference",
+                           id = "Subject",
+                           between = c("InitSess")
+                           )
 ```
 
+```{r behavExtdTraining}
+cat.acc.extd <- behavData %>%
+  filter(Procedure == "TaskL", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess) %>%
+  group_by(InitSess,Session, Subject) %>%
+  summarise(Accuracy = mean(LearnSearch.ACC))
+cat.acc.extd.aov <- aov_ez(data = cat.acc.extd,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            within = c("Session"),
+                            between = c("InitSess")
+                            )
+cat.rt.extd <- behavData %>%
+  filter(Procedure == "TaskL", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess, LearnSearch.ACC == 1) %>%
+  group_by(InitSess,Session,Subject) %>%
+  summarise(ResponseTime = mean(LearnSearch.RT))
+cat.rt.extd.aov <- aov_ez(data = cat.rt.extd,
+                          dv = "ResponseTime",
+                          id = "Subject",
+                          within = c("Session"),
+                          between = c("InitSess")
+                          )
+srch.acc.extd <- behavData %>%
+  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess) %>%
+  group_by(InitSess,Session,CompCond,Subject) %>%
+  summarise(Accuracy = mean(CompSearch.ACC))
+srch.acc.extd.aov <- aov_ez(data = srch.acc.extd,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            within = c("Session","CompCond"),
+                            between = c("InitSess")
+                            )
+srch.rt.extd <- behavData %>%
+  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess, CompSearch.ACC == 1) %>%
+  group_by(InitSess,Session,CompCond,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT))
+srch.rt.extd.aov <- aov_ez(data = srch.rt.extd,
+                           dv = "ResponseTime",
+                           id = "Subject",
+                           within = c("Session","CompCond"),
+                           between = c("InitSess")
+                           )
+
+distint.extd <- behavData %>%
+  filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess, CompSearch.ACC == 1) %>%
+  group_by(InitSess,Session,CompCond,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT)) %>%
+  spread(CompCond, ResponseTime) %>%
+  mutate(DistractorInterference = TD - TO)
+distint.extd.aov <- aov_ez(data = distint.extd,
+                           dv = "DistractorInterference",
+                           id = "Subject",
+                           within = c("Session"),
+                           between = c("InitSess")
+                           )
+distint.extd.emmeans <- emmeans(distint.extd.aov, ~InitSess*Session)
+distint.extd.posthoc <- pairs(distint.extd.emmeans)
+```
+
+```{r behavRetrTraining}
+cat.acc.retr <- behavData %>%
+  filter(Procedure == "TaskL", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
+  group_by(retrain,FinSess, Subject) %>%
+  summarise(Accuracy = mean(LearnSearch.ACC))
+cat.acc.retr.aov <- aov_ez(data = cat.acc.retr,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            between = c("retrain","FinSess")
+                            )
+cat.rt.retr <- behavData %>%
+  filter(Procedure == "TaskL", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, LearnSearch.ACC == 1) %>%
+  group_by(retrain,FinSess,Subject) %>%
+  summarise(ResponseTime = mean(LearnSearch.RT))
+cat.rt.retr.aov <- aov_ez(data = cat.rt.retr,
+                          dv = "ResponseTime",
+                          id = "Subject",
+                          between = c("retrain","FinSess")
+                          )
+srch.acc.retr <- behavData %>%
+  filter(Procedure == "TaskC", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
+  group_by(retrain,FinSess,CompCond,Subject) %>%
+  summarise(Accuracy = mean(CompSearch.ACC))
+srch.acc.retr.aov <- aov_ez(data = srch.acc.retr,
+                            dv = "Accuracy",
+                            id = "Subject",
+                            within = c("CompCond"),
+                            between = c("retrain","FinSess")
+                            )
+srch.rt.retr <- behavData %>%
+  filter(Procedure == "TaskC", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
+  group_by(FinSess,retrain,CompCond,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT))
+srch.rt.retr.aov <- aov_ez(data = srch.rt.retr,
+                           dv = "ResponseTime",
+                           id = "Subject",
+                           within = c("CompCond"),
+                           between = c("retrain","FinSess")
+                           )
+distint.retr <- behavData %>%
+  filter(Procedure == "TaskC", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
+  group_by(FinSess,retrain,CompCond,Subject) %>%
+  summarise(ResponseTime = mean(CompSearch.RT)) %>%
+  spread(CompCond, ResponseTime) %>%
+  mutate(DistractorInterference = TD - TO)
+distint.retr.aov <- aov_ez(data = distint.retr,
+                           dv = "DistractorInterference",
+                           id = "Subject",
+                           between = c("retrain","FinSess")
+                           )
+```
+
+```{r saveBehavData}
+save(cat.acc.init.aov, cat.rt.init.aov, srch.acc.init.aov, srch.rt.init.aov,distint.init.aov, cat.acc.extd.aov, cat.rt.extd.aov, srch.acc.extd.aov, srch.rt.extd.aov, distint.extd.aov, distint.extd.posthoc, cat.acc.retr.aov, cat.rt.retr.aov, srch.acc.retr.aov, srch.rt.retr.aov, distint.retr.aov, file = "DataOutput/behavANOVAs.RData")
+```
 
 ```{r behavPlots}
 behavData %>%
@@ -478,7 +472,49 @@ print(
 ,include.rownames = FALSE, comment = FALSE)
 ```
 
+## Search Task
 
+### Initial Training
+```{r, findInitSrchCompWindows}
+grandTarget <- allData %>%
+  filter( Event == "Learn" & LatStim == "Predictor" & searchRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+NtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+NtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+grandDist <- allData %>%
+  filter( Event == "Learn" & LatStim == "NonPred" & searchRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+PdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+PdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+```
+
+#### Target Lateralised
+
+#### Distractor Lateralised
+
+### Extended training effects
+
+#### Target Lateralised
+
+#### Distractor Lateralised
+
+### Retraining effects
+
+#### Target Lateralised
+
+#### Distractor Lateralised
+
+## Pre-move code
 ```{r}
 
 allData %>%
