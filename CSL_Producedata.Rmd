@@ -448,7 +448,7 @@ gc()
 ```{r setParams}
 baseline = 200
 srateMultiplier = 1
-winSize = 50
+winSize = 100
 
 learnRej <- allData %>%
   filter(Event == "Learn", sample == 1, Contra == "Contralateral") %>%
@@ -778,10 +778,10 @@ allData %>%
     geom_line( aes(colour = interaction(Group1,Session)),size=1) +
     #geom_line( aes(colour = Group1),size=1) +
     #geom_line(data = . %>% filter(Session == "Day3"), aes(colour = Group),linetype="dashed",size=3) +
-    scale_color_manual(values=c("seagreen3", "gray52","seagreen3", "gray52"))+
+    scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa()
 ggsave("Figures/SrchExtdERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
@@ -799,11 +799,11 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
-NtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
-NtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+TONtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+TONtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
 search.Retr.TO <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(Session == "Day3", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(Session == "Day3", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>TONtStart & sample < TONtEnd) %>%
   group_by(Group1,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.TO.aov <- aov_ez(
@@ -822,11 +822,11 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
-NtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
-NtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+TDNtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+TDNtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
 search.Retr.TD <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(Session == "Day3", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(Session == "Day3", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>TDNtStart & sample < TDNtEnd) %>%
   group_by(Group1,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.TD.aov <- aov_ez(
@@ -849,11 +849,11 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
-NtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
-NtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+DTNtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+DTNtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
 search.Retr.DTnt <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTNtStart & sample < DTNtEnd) %>%
   group_by(Group1,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.DTnt.aov <- aov_ez(
@@ -872,11 +872,11 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
-PdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
-PdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+DTPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+DTPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
 search.Retr.DTpd <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>PdStart & sample < PdEnd) %>%
+  filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample > DTPdStart & sample < DTPdEnd) %>%
   group_by(Group1,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.DTpd.aov <- aov_ez(
@@ -889,8 +889,36 @@ search.Retr.DTpd.aov <- aov_ez(
 search.Retr.DTpd.results <- apa_print(search.Retr.DTpd.aov)
 ```
 
-```{r saveSrchExtdERPData}
-save(search.Extd.TO.results, search.Extd.TD.results, search.Extd.DTnt.results, search.Extd.DTpd.results, file = "DataOutput/SrchRetrERPANOVAs.RData")
+```{r saveSrchRetrERPData}
+save(search.Retr.TO.results, search.Retr.TD.results, search.Retr.DTnt.results, search.Retr.DTpd.results, file = "DataOutput/SrchRetrERPANOVAs.RData")
+```
+
+```{r srchRetrERPPlot}
+allData %>%
+    filter(Session == "Day3", Event == "Search"  & searchRej == 0 & LatStim != "None") %>%
+    mutate(sample = sample-baseline) %>%
+    group_by(Stimulus,sample,Contra,Group2,GroupP) %>%
+    summarise(mean = mean(voltage)) %>%
+    spread(Contra, mean) %>% 
+    mutate(diff = Contralateral - Ipsilateral) %>%
+    ggplot(., aes(sample,diff)) +
+    geom_rect(data = . %>% filter(Stimulus  == "Target (None mid)"),xmin = TONtStart, xmax = TONtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Target (Distractor mid)"),xmin = TDNtStart, xmax = TDNtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = DTNtStart, xmax = DTNtEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = DTPdStart, xmax = DTPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0,aes(colour= "gray") ) +
+    geom_hline(yintercept = 0,aes(colour= "gray") ) +
+    geom_line( aes(colour = interaction(Group2,GroupP)),size=0.8) +
+    #geom_line( aes(colour = Group1),size=1) +
+    #geom_line(data = . %>% filter(Session == "Day3"), aes(colour = Group),linetype="dashed",size=3) +
+    scale_color_manual(values=c("orange4", "blue4","seagreen4", "red4"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa()+
+    theme(legend.text = element_text( size = 4),
+          legend.title = element_text( size = 4))
+ggsave("Figures/SrchRetrERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
 
 ## Pre-move code
