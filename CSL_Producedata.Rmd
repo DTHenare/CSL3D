@@ -368,6 +368,11 @@ behavData %>%
           legend.position = "None")
 ```
 
+```{r clearBehavData, include=FALSE}
+rm(list = ls())
+gc()
+```
+
 # EEG data
 ```{r organiseData}
 dPath = 'EEG/Visuals/'
@@ -775,14 +780,16 @@ allData %>%
     geom_rect(data = . %>% filter(Stimulus  == "Distractor (Target mid)"),xmin = DTPdStart, xmax = DTPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
     geom_vline(xintercept = 0,aes(colour= "gray") ) +
     geom_hline(yintercept = 0,aes(colour= "gray") ) +
-    geom_line( aes(colour = interaction(Group1,Session)),size=1) +
+    geom_line( aes(colour = interaction(Group1,Session)),size=0.8) +
     #geom_line( aes(colour = Group1),size=1) +
     #geom_line(data = . %>% filter(Session == "Day3"), aes(colour = Group),linetype="dashed",size=3) +
     scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
     facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
-    theme_apa()
+    theme_apa()+
+    theme(legend.text = element_text( size = 4),
+          legend.title = element_text( size = 4))
 ggsave("Figures/SrchExtdERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
 
