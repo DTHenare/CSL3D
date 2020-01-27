@@ -649,7 +649,8 @@ allData %>%
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
     facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
-    theme_apa()
+    theme_apa() +
+  theme(text = element_text(size=10))
 ggsave("Figures/SrchInitERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
 
@@ -788,7 +789,8 @@ allData %>%
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
     facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa()+
-    theme(legend.text = element_text( size = 4),
+    theme(text = element_text(size=10),
+          legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
 ggsave("Figures/SrchExtdERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
@@ -923,7 +925,8 @@ allData %>%
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
     facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa()+
-    theme(legend.text = element_text( size = 4),
+    theme(text = element_text(size=10),
+          legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
 ggsave("Figures/SrchRetrERPs.jpg", dpi = 300, width = 5, height = 3, units = c("in"))
 ```
