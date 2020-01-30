@@ -560,7 +560,7 @@ search.Init.TD.fup <- apa_print.emmGrid(pairs(emmeans(search.Init.TD.aov, ~Contr
 
 #### Distractor Lateralised
 ```{r srchInitDist}
-grandTarget <- allData %>%
+grandDist <- allData %>%
   filter(Session == "Day1", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0) %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(sample > 200) %>%
@@ -711,7 +711,7 @@ search.Extd.TD.fup <- apa_print.emmGrid(pairs(emmeans(search.Extd.TD.aov, ~Contr
 
 #### Distractor Lateralised
 ```{r srchExtdDist}
-grandTarget <- allData %>%
+grandDist <- allData %>%
   filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0) %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(sample > 200) %>%
