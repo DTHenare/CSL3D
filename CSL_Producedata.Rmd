@@ -806,7 +806,6 @@ search.Extd.DTpd.aov <- aov_ez(
 )
 search.Extd.DTpd.results <- apa_print(search.Extd.DTpd.aov)
 search.Extd.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Extd.DTpd.aov, ~Contra|Session)))
-search.Extd.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Extd.DTpd.aov, ~Contra|Session*Group1)))
 ```
 
 ```{r saveSrchExtdERPData}
