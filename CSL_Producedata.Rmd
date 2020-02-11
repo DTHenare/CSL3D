@@ -894,14 +894,14 @@ TONtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
 search.Retr.TO <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>TONtStart & sample < TONtEnd) %>%
-  group_by(Group1,GroupP,Subject,Contra) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.TO.aov <- aov_ez(
   data = search.Retr.TO,
   dv = "mV",
   id = "Subject",
   within = c("Contra"),
-  between = c("Group1","GroupP")
+  between = c("Group2","GroupP")
 )
 search.Retr.TO.results <- apa_print(search.Retr.TO.aov)
 grandTarget <- allData %>%
@@ -926,14 +926,14 @@ TDNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
 search.Retr.TD <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>TDNtStart & sample < TDNtEnd) %>%
-  group_by(Group1,GroupP,Subject,Contra) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.TD.aov <- aov_ez(
   data = search.Retr.TD,
   dv = "mV",
   id = "Subject",
   within = c("Contra"),
-  between = c("Group1","GroupP")
+  between = c("Group2","GroupP")
 )
 search.Retr.TD.results <- apa_print(search.Retr.TD.aov)
 ```
@@ -961,14 +961,14 @@ DTNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
 search.Retr.DTnt <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTNtStart & sample < DTNtEnd) %>%
-  group_by(Group1,GroupP,Subject,Contra) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.DTnt.aov <- aov_ez(
   data = search.Retr.DTnt,
   dv = "mV",
   id = "Subject",
   within = c("Contra"),
-  between = c("Group1","GroupP")
+  between = c("Group2","GroupP")
 )
 search.Retr.DTnt.results <- apa_print(search.Retr.DTnt.aov)
 
@@ -993,14 +993,14 @@ DTPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
 search.Retr.DTpd <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample > DTPdStart & sample < DTPdEnd) %>%
-  group_by(Group1,GroupP,Subject,Contra) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Retr.DTpd.aov <- aov_ez(
   data = search.Retr.DTpd,
   dv = "mV",
   id = "Subject",
   within = c("Contra"),
-  between = c("Group1","GroupP")
+  between = c("Group2","GroupP")
 )
 search.Retr.DTpd.results <- apa_print(search.Retr.DTpd.aov)
 search.Retr.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Retr.DTpd.aov, ~Contra|GroupP)))
