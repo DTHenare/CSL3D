@@ -84,14 +84,216 @@ A 2x4 ANOVA was carried out in order to evaluate whether there were effects of s
 (ref:behavDistInt) Response time cost (response time in distractor present trials minus RT in distractor absent trials) caused by the presence of a coloured distractor in the search task. Participants assigned to respond to colour in the categorisation task (shown in green) had significantly higher costs during the search task than participants assigned to repsond to shape in the categorisation task (shown in grey). Individual response time costs are depicted as dots alongside a boxplot and violin plot to visualise the range and distribution of costs for each group.
 
 ```{r DistIntViolin, fig.cap = "(ref:behavDistInt)"}
-include_graphics("Figures/DistIntViolin.jpg", auto_pdf = TRUE)
+#include_graphics("Figures/DistIntViolin.jpg", auto_pdf = TRUE)
 ```
 
 ## ERP results
 
-```{r loadERPResults}
+### Search
+
+#### Initial training
+
+```{r loadInitERPResults}
+load('DataOutput/SrchInitERPANOVAs.RData')
 ```
 
+##### Target response - Distractor absent trials
+
+```{r loadSrchInitPlot}
+include_graphics("Figures/SrchInitERPs.jpg", auto_pdf = TRUE)
+```
+
+```{r initTOresultsTable, results='asis'}
+apa_table(
+  search.Init.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
+  , escape = FALSE
+)
+```
+
+```{r initTOfupTable, results='asis'}
+row.names(search.Init.TO.fup$table) =c()
+apa_table(
+  search.Init.TO.fup$table
+  , caption = "Follow-up comparisons for the target only trials"
+  , escape = FALSE
+)
+```
+
+##### Target response - Distractor present trials
+
+```{r initTDresultsTable, results='asis'}
+apa_table(
+  search.Init.TD.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
+  , escape = FALSE
+)
+```
+
+```{r initTDfupTable, results='asis'}
+row.names(search.Init.TD.fup$table) =c()
+apa_table(
+  search.Init.TD.fup$table
+  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
+  , escape = FALSE
+)
+```
+
+##### Distractor response - Distractor present trials
+
+```{r initDTpdresultsresultsTable, results='asis'}
+apa_table(
+  search.Init.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
+  , escape = FALSE
+)
+```
+
+```{r initDTpdfupTable, results='asis'}
+row.names(search.Init.DTpd.fup$table) =c()
+apa_table(
+  search.Init.DTpd.fup$table
+  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
+  , escape = FALSE
+)
+```
+
+#### Extended training
+
+```{r loadExtdERPResults}
+load('DataOutput/SrchExtdERPANOVAs.RData')
+```
+```{r loadSrchExtdNOSUBPlot}
+include_graphics("Figures/SrchExtdERPsNOSUB.jpg", auto_pdf = TRUE)
+```
+
+##### Target response - Distractor absent trials
+
+```{r loadSrchExtdPlot}
+include_graphics("Figures/SrchExtdERPs.jpg", auto_pdf = TRUE)
+```
+
+```{r ExtdTOresultsTable, results='asis'}
+apa_table(
+  search.Extd.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
+  , escape = FALSE
+)
+```
+
+```{r ExtdTOfupTable, results='asis'}
+row.names(search.Extd.TO.fup$table) =c()
+apa_table(
+  search.Extd.TO.fup$table
+  , caption = "Follow-up comparisons for the target only trials"
+  , escape = FALSE
+)
+```
+
+##### Target response - Distractor present trials
+
+```{r ExtdTDresultsTable, results='asis'}
+apa_table(
+  search.Extd.TD.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
+  , escape = FALSE
+)
+```
+
+```{r ExtdTDfupTable, results='asis'}
+row.names(search.Extd.TD.fup$table) =c()
+apa_table(
+  search.Extd.TD.fup$table
+  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
+  , escape = FALSE
+)
+```
+
+##### Distractor response - Distractor present trials
+
+```{r ExtdDTpdresultsresultsTable, results='asis'}
+apa_table(
+  search.Extd.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
+  , escape = FALSE
+)
+```
+
+```{r ExtdDTpdfupTable, results='asis'}
+row.names(search.Extd.DTpd.fup$table) =c()
+apa_table(
+  search.Extd.DTpd.fup$table
+  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
+  , escape = FALSE
+)
+```
+
+#### Retraining
+
+```{r loadRetrERPResults}
+load('DataOutput/SrchRetrERPANOVAs.RData')
+```
+
+##### Target response - Distractor absent trials
+
+```{r loadSrchRetrPlot}
+include_graphics("Figures/SrchRetrERPs.jpg", auto_pdf = TRUE)
+```
+
+```{r RetrTOresultsTable, results='asis'}
+apa_table(
+  search.Retr.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
+  , escape = FALSE
+)
+```
+
+```{r RetrTOfupTable, results='asis',eval = FALSE, echo = FALSE}
+row.names(search.Retr.TO.fup$table) =c()
+apa_table(
+  search.Retr.TO.fup$table
+  , caption = "Follow-up comparisons for the target only trials"
+  , escape = FALSE
+)
+```
+
+##### Target response - Distractor present trials
+
+```{r RetrTDresultsTable, results='asis'}
+apa_table(
+  search.Retr.TD.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
+  , escape = FALSE
+)
+```
+
+```{r RetrTDfupTable, results='asis',eval = FALSE, echo = FALSE}
+row.names(search.Retr.TD.fup$table) =c()
+apa_table(
+  search.Retr.TD.fup$table
+  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
+  , escape = FALSE
+)
+```
+
+##### Distractor response - Distractor present trials
+
+```{r RetrDTpdresultsresultsTable, results='asis'}
+apa_table(
+  search.Retr.TO.results$table
+  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
+  , escape = FALSE
+)
+```
+
+```{r RetrDTpdfupTable, results='asis',eval = FALSE, echo = FALSE}
+row.names(search.Retr.DTpd.fup$table) =c()
+apa_table(
+  search.Retr.DTpd.fup$table
+  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
+  , escape = FALSE
+)
+```
 
 \newpage
 
