@@ -454,7 +454,8 @@ gc()
 baseline = 200
 srateMultiplier = 1
 winSize = 100
-winBnd <- 0.2
+winBnd <- 0.8
+fixedWin=1
 
 learnRej <- allData %>%
   filter(Event == "Learn", sample == 1, Contra == "Contralateral") %>%
@@ -508,11 +509,16 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
-peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
-peakValue <- min(grandTarget$diff)
-TONtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
-postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
-TONtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+if (fixedWin) {
+  TONtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TONtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+  peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+  peakValue <- min(grandTarget$diff)
+  TONtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+  postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+  TONtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Init.TO <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day1", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>TONtStart & sample < TONtEnd) %>%
@@ -536,12 +542,17 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  TDNtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TDNtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
 peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
 peakValue <- min(grandTarget$diff)
 TDNtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 TDNtStart = ifelse(is.na(TDNtStart),200,TDNtStart)
 postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
 TDNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Init.TD <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day1", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>TDNtStart & sample < TDNtEnd) %>%
@@ -568,11 +579,16 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTNtStart = grandDist$sample[grandDist$diff == min(grandDist$diff)]-winSize/2
+  DTNtEnd = grandDist$sample[grandDist$diff == min(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- min(grandDist$diff)
 DTNtStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Init.DTnt <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day1", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTNtStart & sample < DTNtEnd) %>%
@@ -594,11 +610,16 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  DTPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- max(grandDist$diff)
 DTPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
 search.Init.DTpd <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day1", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTPdStart & sample < DTPdEnd) %>%
@@ -659,14 +680,19 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  TONtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TONtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
 peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
 peakValue <- min(grandTarget$diff)
 TONtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
 TONtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Extd.TO <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>TONtStart & sample < TONtEnd) %>%
   group_by(Group1,Session,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Extd.TO.aov <- aov_ez(
@@ -687,15 +713,20 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  TDNtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TDNtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
 peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
 peakValue <- min(grandTarget$diff)
 TDNtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 TDNtStart = ifelse(is.na(TDNtStart),200,TDNtStart)
 postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
 TDNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Extd.TD <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>TDNtStart & sample < TDNtEnd) %>%
   group_by(Group1,Session,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Extd.TD.aov <- aov_ez(
@@ -719,14 +750,19 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTNtStart = grandDist$sample[grandDist$diff == min(grandDist$diff)]-winSize/2
+  DTNtEnd = grandDist$sample[grandDist$diff == min(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- min(grandDist$diff)
 DTNtStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Extd.DTnt <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>NtStart & sample < NtEnd) %>%
+  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTNtStart & sample < DTNtEnd) %>%
   group_by(Group1,Session,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Extd.DTnt.aov <- aov_ez(
@@ -746,14 +782,19 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  DTPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- max(grandDist$diff)
 DTPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
 search.Extd.DTpd <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
-  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>PdStart & sample < PdEnd) %>%
+  filter(GroupP == "Unchanged", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTPdStart & sample < DTPdEnd) %>%
   group_by(Group1,Session,Subject,Contra) %>%
   summarise(mV = mean(voltage)) 
 search.Extd.DTpd.aov <- aov_ez(
@@ -841,11 +882,16 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  TONtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TONtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
 peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
 peakValue <- min(grandTarget$diff)
 TONtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
 TONtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Retr.TO <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Target (None mid)" & searchRej == 0 & sample>TONtStart & sample < TONtEnd) %>%
@@ -867,12 +913,17 @@ grandTarget <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  TDNtStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  TDNtEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
 peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
 peakValue <- min(grandTarget$diff)
 TDNtStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 TDNtStart = ifelse(is.na(TDNtStart),200,TDNtStart)
 postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
 TDNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Retr.TD <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Target (Distractor mid)" & searchRej == 0 & sample>TDNtStart & sample < TDNtEnd) %>%
@@ -898,11 +949,16 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTNtStart = grandDist$sample[grandDist$diff == min(grandDist$diff)]-winSize/2
+  DTNtEnd = grandDist$sample[grandDist$diff == min(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- min(grandDist$diff)
 DTNtStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTNtEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
 search.Retr.DTnt <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample>DTNtStart & sample < DTNtEnd) %>%
@@ -925,11 +981,16 @@ grandDist <- allData %>%
   summarise(mean = mean(voltage)) %>%
   spread(Contra, mean) %>% 
   mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  DTPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  DTPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
 peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
 peakValue <- max(grandDist$diff)
 DTPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
 postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
 DTPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
 search.Retr.DTpd <- allData %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
   filter(Session == "Day3", Event == "Search" & Stimulus == "Distractor (Target mid)" & searchRej == 0 & sample > DTPdStart & sample < DTPdEnd) %>%
