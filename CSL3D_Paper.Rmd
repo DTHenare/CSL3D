@@ -208,11 +208,15 @@ To evaluate the effects of retraining we focussed on data from Day3 and used a 2
 load('DataOutput/SrchInitERPANOVAs.RData')
 ```
 
+When focussing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate the effect of group (colour vs shape) and electrode lateralirty (contralateral vs ipsilateral) on ERP component amplitude in the search task. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets int he presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
+
 ##### Target response - Distractor absent trials
 
 ```{r loadSrchInitPlot}
 include_graphics("Figures/SrchInitERPs.tiff", auto_pdf = FALSE)
 ```
+
+The results showed no significant main effect of group on NT amplitude (`r search.Init.TO.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.TO.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.TO.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant NT was elicited by targets for participants in the shape group (`r search.Init.TO.results$full_result$Contralateral_Ipsilateral_S`) but not the colour group (`r search.Init.TO.results$full_result$Contralateral_Ipsilateral_C`).
 
 ```{r initTOresultsTable, results='asis'}
 apa_table(
@@ -233,6 +237,8 @@ apa_table(
 
 ##### Target response - Distractor present trials
 
+The results showed no significant main effect of group on NT amplitude (`r search.Init.TD.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.TD.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.TD.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant NT was elicited by targets for participants in the shape group (`r search.Init.TD.results$full_result$Contralateral_Ipsilateral_S`) and that the NT was present but reduced for the colour group (`r search.Init.TD.results$full_result$Contralateral_Ipsilateral_C`).
+
 ```{r initTDresultsTable, results='asis'}
 apa_table(
   search.Init.TD.results$table
@@ -251,6 +257,8 @@ apa_table(
 ```
 
 ##### Distractor response - Distractor present trials
+
+The results showed no significant main effect of group on PD amplitude (`r search.Init.DTpd.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.DTpd.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.DTpd.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant PD was elicited by targets for participants in the shape group (`r search.Init.DTpd.results$full_result$Contralateral_Ipsilateral_S`) and that the PD was enhanced for the colour group (`r search.Init.DTpd.results$full_result$Contralateral_Ipsilateral_C`).
 
 ```{r initDTpdresultsresultsTable, results='asis'}
 apa_table(
@@ -279,11 +287,15 @@ load('DataOutput/SrchExtdERPANOVAs.RData')
 include_graphics("Figures/SrchExtdERPsNOSUB.tiff", auto_pdf = FALSE)
 ```
 
+For participants whose categorisation task remained unchanged across the 3 days, a 2x2x2 mixed ANOVA evaluated the effects of group (colour vs shape), electrode laterality (contralateral vs ipsilateral), and session (Day1 vs Day3) on ERP component amplitude. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets int he presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
+
 ##### Target response - Distractor absent trials
 
 ```{r loadSrchExtdPlot}
 include_graphics("Figures/SrchExtdERPs.tiff", auto_pdf = FALSE)
 ```
+
+The results showed no significant main effect of group (`r search.Extd.TO.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.TO.results$full_result$Contra`) and session (`r search.Extd.TO.results$full_result$Session`). There was a significant interaction between group and electrode laterality (`r search.Extd.TO.results$full_result$Group1_Contra`) with follow-up comparisons showing a significant NT for participants in the shape group (`r search.Extd.TO.fup$full_result$Contralateral_Ipsilateral_S`) but not for participants in the colour group (`r search.Extd.TO.fup$full_result$Contralateral_Ipsilateral_C`). There was no significant interaction between group and sesssion (`r search.Extd.TO.results$full_result$Group1_Session`), laterality and session (`r search.Extd.TO.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.TO.results$full_result$Group1_Contra_Session`). 
 
 ```{r ExtdTOresultsTable, results='asis'}
 apa_table(
@@ -304,6 +316,8 @@ apa_table(
 
 ##### Target response - Distractor present trials
 
+The results showed no significant main effect of group (`r search.Extd.TD.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.TD.results$full_result$Contra`) and session (`r search.Extd.TD.results$full_result$Session`). There was a significant interaction between group and electrode laterality (`r search.Extd.TD.results$full_result$Group1_Contra`) with follow-up comparisons showing a significant NT for participants in the shape group (`r search.Extd.TD.fup$full_result$Contralateral_Ipsilateral_S`) and a present but reduced NT for participants in the colour group (`r search.Extd.TD.fup$full_result$Contralateral_Ipsilateral_C`). There was no significant interaction between group and sesssion (`r search.Extd.TD.results$full_result$Group1_Session`), laterality and session (`r search.Extd.TD.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.TD.results$full_result$Group1_Contra_Session`). 
+
 ```{r ExtdTDresultsTable, results='asis'}
 apa_table(
   search.Extd.TD.results$table
@@ -322,6 +336,8 @@ apa_table(
 ```
 
 ##### Distractor response - Distractor present trials
+
+The results showed no significant main effect of group (`r search.Extd.DTpd.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.DTpd.results$full_result$Contra`) and session (`r search.Extd.DTpd.results$full_result$Session`). There was a significant interaction between electrode laterality and session (`r search.Extd.DTpd.results$full_result$Contra_Session`) with follow-up comparisons showing a significant PD for participants on Day1 (`r search.Extd.DTpd.fup$full_result$Contralateral_Ipsilateral_Day1`) and a reduced PD by Day3 (`r search.Extd.DTpd.fup$full_result$Contralateral_Ipsilateral_Day3`). There was no significant interaction between group and sesssion (`r search.Extd.DTpd.results$full_result$Group1_Session`), group and laterality (`r search.Extd.DTpd.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.DTpd.results$full_result$Group1_Contra_Session`). 
 
 ```{r ExtdDTpdresultsresultsTable, results='asis'}
 apa_table(
@@ -346,11 +362,15 @@ apa_table(
 load('DataOutput/SrchRetrERPANOVAs.RData')
 ```
 
+To evaluate the effects of retraining we focussed on data from Day3 and used a 2x2x2 mixed ANOVA to evaluate the effect of Day3 categorisation group (colour vs shape), electrode laterality (contralateral vs ipsilateral), and training history (changed vs unchanged) on ERP component amplitude. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets in the presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
+
 ##### Target response - Distractor absent trials
 
 ```{r loadSrchRetrPlot}
 include_graphics("Figures/SrchRetrERPs.tiff", auto_pdf = FALSE)
 ```
+
+The results showed a significant main effect of electrode laterality (`r search.Retr.TO.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.TO.results$full_result$Group2`) and training history (`r search.Retr.TO.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.TO.results$full_result$Group2_Contra`), group and training history (`r search.Retr.TO.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.TO.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.TO.results$full_result$Group2_GroupP_Contra`).
 
 ```{r RetrTOresultsTable, results='asis'}
 apa_table(
@@ -371,6 +391,8 @@ apa_table(
 
 ##### Target response - Distractor present trials
 
+The results showed a significant main effect of electrode laterality (`r search.Retr.TD.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.TD.results$full_result$Group2`) and training history (`r search.Retr.TD.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.TD.results$full_result$Group2_Contra`), group and training history (`r search.Retr.TD.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.TD.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.TD.results$full_result$Group2_GroupP_Contra`).
+
 ```{r RetrTDresultsTable, results='asis'}
 apa_table(
   search.Retr.TD.results$table
@@ -389,6 +411,8 @@ apa_table(
 ```
 
 ##### Distractor response - Distractor present trials
+
+The results showed a significant main effect of electrode laterality (`r search.Retr.DTpd.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.DTpd.results$full_result$Group2`) and training history (`r search.Retr.DTpd.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.DTpd.results$full_result$Group2_Contra`), group and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.DTpd.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP_Contra`).
 
 ```{r RetrDTpdresultsresultsTable, results='asis'}
 apa_table(
