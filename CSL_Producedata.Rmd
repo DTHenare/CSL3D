@@ -51,11 +51,13 @@ behavData <- rbind(day1Behav, day2Behav, day3Behav)
 rm(day1Behav, day2Behav, day3Behav)
 
 #Remove test data subjects
-behavData <- filter(behavData, Subject != 99 & Subject != 999)
+behavData <- behavData %>% mutate(Subject = ifelse(Subject==99,37,Subject))
+behavData <- behavData %>% mutate(Subject = ifelse(Subject==999,37,Subject))
+#behavData <- filter(behavData, Subject != 99 & Subject != 999)
 
 #Add group assignment information to data
 groupData <- read.table("Behaviour/CSL3D_GroupInfo.csv",header = TRUE, sep=",")
-for (Subj in c(1:36)) {
+for (Subj in c(1:37)) {
     behavData$Group[behavData$Subject==Subj] = groupData$Group[groupData$Subject==Subj]
 }
 behavData$Group = factor(behavData$Group, labels = c("Colour-Colour", "Colour-Shape", "Shape-Colour","Shape-Shape"))
@@ -118,6 +120,7 @@ cat.acc.init.aov <- aov_ez(data = cat.acc.init,
                             id = "Subject",
                             between = c("InitSess")
                             )
+cat.acc.init.t <- t.test()
 cat.rt.init <- behavData %>%
   filter(Procedure == "TaskL", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, LearnSearch.ACC == 1) %>%
   group_by(InitSess,Subject) %>%
@@ -479,7 +482,7 @@ print(
   xtable(allData %>%
     filter(Event == "Learn",sample == 1, Contra == 'Contralateral') %>%
     group_by(Subject,LatStim) %>%
-    summarise(trialCount = sum(sample)) %>%
+    summarise(trialCount = sum(sample), rej = mean(learnRej)) %>%
       spread(LatStim,trialCount)
   ,digits = 0)
 ,include.rownames = FALSE, comment = FALSE)
@@ -488,10 +491,525 @@ print(
   xtable(allData %>%
     filter(Event == "Search",sample == 1, Contra == 'Contralateral') %>%
     group_by(Subject,LatStim,Group) %>%
-    summarise(trialCount = sum(sample)) %>%
+    summarise(trialCount = sum(sample), rej = mean(learnRej)) %>%
       spread(LatStim,trialCount)
   ,digits = 0)
 ,include.rownames = FALSE, comment = FALSE)
+```
+
+## Learn Task
+
+### Initial Training
+
+#### Target Lateralised
+
+```{r lernInitTarg}
+grandTarget <- allData %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ColNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+  peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+  peakValue <- min(grandTarget$diff)
+  ColNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+  postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+  ColNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Init.Col <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColNTStart & sample < ColNTEnd) %>%
+  group_by(Group1,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Init.ColNt.aov <- aov_ez(
+  data = learn.Init.Col,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = "Group1"
+)
+learn.Init.ColNt.results <- apa_print(learn.Init.ColNt.aov)
+learn.Init.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Init.ColNt.aov, ~Contra|Group1)))
+
+grandTarget <- allData %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ShpNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+peakValue <- min(grandTarget$diff)
+ShpNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+ShpNTStart = ifelse(is.na(ShpNTStart),200,ShpNTStart)
+postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+ShpNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Init.Shp <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample>ShpNTStart & sample < ShpNTEnd) %>%
+  group_by(Group1,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Init.ShpNt.aov <- aov_ez(
+  data = learn.Init.Shp,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = "Group1"
+)
+learn.Init.ShpNt.results <- apa_print(learn.Init.ShpNt.aov)
+learn.Init.ShpNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Init.ShpNt.aov, ~Contra|Group1)))
+```
+
+#### Distractor Lateralised
+```{r lernInitDist}
+grandDist <- allData %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ColPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- min(grandDist$diff)
+ColPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ColPdEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Init.ColPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColPdStart & sample < ColPdEnd) %>%
+  group_by(Group1,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Init.ColPd.aov <- aov_ez(
+  data = learn.Init.ColPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = "Group1"
+)
+learn.Init.ColPd.results <- apa_print(learn.Init.ColPd.aov)
+learn.Init.ColPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Init.ColPd.aov, ~Contra|Group1)))
+grandDist <- allData %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ShpPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- max(grandDist$diff)
+ShpPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ShpPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
+learn.Init.ShpPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day1", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample>ShpPdStart & sample < ShpPdEnd) %>%
+  group_by(Group1,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Init.ShpPd.aov <- aov_ez(
+  data = learn.Init.ShpPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = "Group1"
+)
+learn.Init.ShpPd.results <- apa_print(learn.Init.ShpPd.aov)
+learn.Init.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Init.ShpPd.aov, ~Contra|Group1)))
+```
+
+```{r savelernInitERPData}
+save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.results, learn.Init.ShpPd.results, learn.Init.ColNt.fup, learn.Init.ShpNt.fup, learn.Init.ColPd.fup, learn.Init.ShpPd.fup, file = "DataOutput/lernInitERPANOVAs.RData")
+```
+
+```{r lernInitERPPlot}
+    allData %>%
+        filter(Session == "Day1", Event == "Learn"  & learnRej == 0) %>%
+        mutate(sample = sample-baseline) %>%
+        group_by(Stimulus,sample,Contra,Group1) %>%
+        summarise(mean = mean(voltage)) %>%
+        spread(Contra, mean) %>% 
+        mutate(diff = Contralateral - Ipsilateral) %>%
+        ggplot(., aes(sample,diff)) +
+        geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColNTStart, xmax = ColNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+        geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpNTStart, xmax = ShpNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+        geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColPdStart, xmax = ColPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+        geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpPdStart, xmax = ShpPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+        geom_vline(xintercept = 0,aes(colour= "gray") ) +
+        geom_hline(yintercept = 0,aes(colour= "gray") ) +
+        geom_line( aes(colour = Group1),size=1) +
+        scale_color_manual(values=c("seagreen3", "gray52"))+
+        scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
+        scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+        facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+        theme_apa() +
+      theme(text = element_text(size=10))
+ggsave("Figures/lernInitERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+```
+
+### Extended training effects
+
+#### Target Lateralised
+
+```{r lernExtdTarg}
+grandTarget <- allData %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ColNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+peakValue <- min(grandTarget$diff)
+ColNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+ColNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Extd.Col <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColNTStart & sample < ColNTEnd) %>%
+  group_by(Group1,Session,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Extd.ColNt.aov <- aov_ez(
+  data = learn.Extd.Col,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra","Session"),
+  between = "Group1"
+)
+learn.Extd.ColNt.results <- apa_print(learn.Extd.ColNt.aov)
+learn.Extd.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ColNt.aov, ~Contra|Group1*Session)))
+
+grandTarget <- allData %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ShpNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+peakValue <- min(grandTarget$diff)
+ShpNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+ShpNTStart = ifelse(is.na(ShpNTStart),200,ShpNTStart)
+postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+ShpNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Extd.Shp <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample>ShpNTStart & sample < ShpNTEnd) %>%
+  group_by(Group1,Session,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Extd.ShpNt.aov <- aov_ez(
+  data = learn.Extd.Shp,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra","Session"),
+  between = "Group1"
+)
+learn.Extd.ShpNt.results <- apa_print(learn.Extd.ShpNt.aov)
+learn.Extd.ShpNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpNt.aov, ~Contra|Group1*Session)))
+```
+
+#### Distractor Lateralised
+```{r lernExtdDist}
+grandDist <- allData %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ColPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- min(grandDist$diff)
+ColPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ColPdEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Extd.ColPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColPdStart & sample < ColPdEnd) %>%
+  group_by(Group1,Session,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Extd.ColPd.aov <- aov_ez(
+  data = learn.Extd.ColPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra","Session"),
+  between = "Group1"
+)
+learn.Extd.ColPd.results <- apa_print(learn.Extd.ColPd.aov)
+learn.Extd.ColPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ColPd.aov, ~Contra|Session*Group1)))
+grandDist <- allData %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ShpPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- max(grandDist$diff)
+ShpPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ShpPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
+learn.Extd.ShpPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample>ShpPdStart & sample < ShpPdEnd) %>%
+  group_by(Group1,Session,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Extd.ShpPd.aov <- aov_ez(
+  data = learn.Extd.ShpPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra","Session"),
+  between = "Group1"
+)
+learn.Extd.ShpPd.results <- apa_print(learn.Extd.ShpPd.aov)
+learn.Extd.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpPd.aov, ~Contra|Session)))
+```
+
+```{r savelernExtdERPData}
+save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ColNt.fup, learn.Extd.ShpNt.fup, learn.Extd.ColPd.fup, learn.Extd.ShpPd.fup, file = "DataOutput/lernExtdERPANOVAs.RData")
+```
+
+```{r lernExtdERPPlot}
+allData %>%
+    filter(GroupP == "Unchanged", Event == "Learn"  & learnRej == 0 & LatStim != "None") %>%
+    mutate(sample = sample-baseline) %>%
+    group_by(Stimulus,Session,sample,Contra,Group1) %>%
+    summarise(mean = mean(voltage)) %>%
+    spread(Contra, mean) %>% 
+    mutate(diff = Contralateral - Ipsilateral) %>%
+    ggplot(., aes(sample,diff)) +
+    geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColNTStart, xmax = ColNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpNTStart, xmax = ShpNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColPdStart, xmax = ColPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpPdStart, xmax = ShpPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0,aes(colour= "gray") ) +
+    geom_hline(yintercept = 0,aes(colour= "gray") ) +
+    geom_line( aes(colour = interaction(Group1,Session)),size=0.8) +
+    scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa()+
+    theme(text = element_text(size=10),
+          legend.text = element_text( size = 4),
+          legend.title = element_text( size = 4))
+ggsave("Figures/lernExtdERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+```
+
+### Retraining effects
+
+#### Target Lateralised
+
+```{r lernRetrTarg}
+grandTarget <- allData %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ColNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+peakValue <- min(grandTarget$diff)
+ColNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+ColNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Retr.Col <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColNTStart & sample < ColNTEnd) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Retr.ColNt.aov <- aov_ez(
+  data = learn.Retr.Col,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = c("Group2","GroupP")
+)
+learn.Retr.ColNt.results <- apa_print(learn.Retr.ColNt.aov)
+learn.Retr.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ColNt.aov, ~Contra|Group2*GroupP)))
+grandTarget <- allData %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 150 & sample < 300) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpNTStart = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]-winSize/2
+  ShpNTEnd = grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]+winSize/2
+} else {
+peakTime <- grandTarget$sample[grandTarget$diff == min(grandTarget$diff)]
+peakValue <- min(grandTarget$diff)
+ShpNTStart <- grandTarget$sample[max(which(grandTarget[1:which(grandTarget$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+ShpNTStart = ifelse(is.na(ShpNTStart),200,ShpNTStart)
+postPeakData <- grandTarget[which(grandTarget$sample==peakTime)+1:nrow(grandTarget),]
+ShpNTEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Retr.Shp <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample>ShpNTStart & sample < ShpNTEnd) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Retr.ShpNt.aov <- aov_ez(
+  data = learn.Retr.Shp,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = c("Group2","GroupP")
+)
+learn.Retr.ShpNt.results <- apa_print(learn.Retr.ShpNt.aov)
+learn.Retr.ShpNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ShpNt.aov, ~Contra|Group2*GroupP)))
+```
+
+#### Distractor Lateralised
+```{r lernRetrDist}
+grandDist <- allData %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ColPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ColPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- min(grandDist$diff)
+ColPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff>peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ColPdEnd <- postPeakData$sample[min(which(postPeakData$diff > peakValue*winBnd))]
+}
+learn.Retr.ColPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Color (Shape mid)" & learnRej == 0 & sample>ColPdStart & sample < ColPdEnd) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Retr.ColPd.aov <- aov_ez(
+  data = learn.Retr.ColPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = c("Group2","GroupP")
+)
+learn.Retr.ColPd.results <- apa_print(learn.Retr.ColPd.aov)
+learn.Retr.ColPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ColPd.aov, ~Contra|GroupP)))
+grandDist <- allData %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(sample > 200) %>%
+  group_by(sample,Contra) %>%
+  summarise(mean = mean(voltage)) %>%
+  spread(Contra, mean) %>% 
+  mutate(diff = Contralateral - Ipsilateral)
+if (fixedWin) {
+  ShpPdStart = grandDist$sample[grandDist$diff == max(grandDist$diff)]-winSize/2
+  ShpPdEnd = grandDist$sample[grandDist$diff == max(grandDist$diff)]+winSize/2
+} else {
+peakTime <- grandDist$sample[grandDist$diff == max(grandDist$diff)]
+peakValue <- max(grandDist$diff)
+ShpPdStart <- grandDist$sample[max(which(grandDist[1:which(grandDist$sample==peakTime)-1,]$diff<peakValue*winBnd))]
+postPeakData <- grandDist[which(grandDist$sample==peakTime)+1:nrow(grandDist),]
+ShpPdEnd <- postPeakData$sample[min(which(postPeakData$diff < peakValue*winBnd))]
+}
+learn.Retr.ShpPd <- allData %>%
+  mutate(sample = sample*srateMultiplier-baseline) %>%
+  filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0 & sample > ShpPdStart & sample < ShpPdEnd) %>%
+  group_by(Group2,GroupP,Subject,Contra) %>%
+  summarise(mV = mean(voltage)) 
+learn.Retr.ShpPd.aov <- aov_ez(
+  data = learn.Retr.ShpPd,
+  dv = "mV",
+  id = "Subject",
+  within = c("Contra"),
+  between = c("Group2","GroupP")
+)
+learn.Retr.ShpPd.results <- apa_print(learn.Retr.ShpPd.aov)
+learn.Retr.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ShpPd.aov, ~Contra|GroupP)))
+```
+
+```{r savelernRetrERPData}
+save(learn.Retr.ColNt.results, learn.Retr.ShpNt.results, learn.Retr.ColPd.results, learn.Retr.ShpPd.results, learn.Retr.ColNt.fup, learn.Retr.ShpNt.fup, learn.Retr.ColPd.fup, learn.Retr.ShpPd.fup,  file = "DataOutput/lernRetrERPANOVAs.RData")
+```
+
+```{r lernRetrERPPlot}
+allData %>%
+    filter(Session == "Day3", Event == "Learn"  & learnRej == 0) %>%
+    mutate(sample = sample-baseline) %>%
+    group_by(Stimulus,sample,Contra,Group2,GroupP) %>%
+    summarise(mean = mean(voltage)) %>%
+    spread(Contra, mean) %>% 
+    mutate(diff = Contralateral - Ipsilateral) %>%
+    ggplot(., aes(sample,diff)) +
+    geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColNTStart, xmax = ColNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpNTStart, xmax = ShpNTEnd, ymin = Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Color (Shape mid)"),xmin = ColPdStart, xmax = ColPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_rect(data = . %>% filter(Stimulus  == "Shape (Color mid)"),xmin = ShpPdStart, xmax = ShpPdEnd, ymin = -Inf, ymax = 0, fill = "lemonchiffon") +
+    geom_vline(xintercept = 0,aes(colour= "gray") ) +
+    geom_hline(yintercept = 0,aes(colour= "gray") ) +
+    geom_line( aes(colour = interaction(Group2,GroupP)),size=0.8) +
+    scale_color_manual(values=c("orange4", "blue4","seagreen4", "red4"))+
+    scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
+    scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
+    facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    theme_apa()+
+    theme(legend.text = element_text( size = 4),
+          legend.title = element_text( size = 4),
+          text = element_text(size=6))
+ggsave("Figures/lernRetrERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
 ```
 
 ## Search Task
