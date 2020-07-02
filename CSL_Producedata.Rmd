@@ -663,7 +663,7 @@ save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.result
         scale_color_manual(values=c("seagreen3", "gray52"))+
         scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
         scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-        facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+        facet_grid(.~Stimulus) +
         theme_apa() +
       theme(text = element_text(size=10))
 ggsave("Figures/lernInitERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
@@ -833,7 +833,7 @@ allData %>%
     scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    facet_grid(Group1~Stimulus) +
     theme_apa()+
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
@@ -1004,7 +1004,7 @@ allData %>%
     scale_color_manual(values=c("orange4", "blue4","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Color (Shape mid)" = "Target Only", "Shape (Color mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    facet_grid(Group2~Stimulus) +
     theme_apa()+
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
