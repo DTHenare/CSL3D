@@ -637,11 +637,10 @@ learn.Init.ShpPd.aov <- aov_ez(
   between = "Group1"
 )
 learn.Init.ShpPd.results <- apa_print(learn.Init.ShpPd.aov)
-learn.Init.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Init.ShpPd.aov, ~Contra|Group1)))
 ```
 
 ```{r savelernInitERPData}
-save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.results, learn.Init.ShpPd.results, learn.Init.ColNt.fup, learn.Init.ShpNt.fup, learn.Init.ColPd.fup, learn.Init.ShpPd.fup, file = "DataOutput/lernInitERPANOVAs.RData")
+save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.results, learn.Init.ShpPd.results, learn.Init.ColNt.fup, learn.Init.ShpNt.fup, learn.Init.ColPd.fup, file = "DataOutput/lernInitERPANOVAs.RData")
 ```
 
 ```{r lernInitERPPlot}
@@ -705,7 +704,6 @@ learn.Extd.ColNt.aov <- aov_ez(
   between = "Group1"
 )
 learn.Extd.ColNt.results <- apa_print(learn.Extd.ColNt.aov)
-learn.Extd.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ColNt.aov, ~Contra|Group1*Session)))
 
 grandTarget <- allData %>%
   filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
@@ -739,7 +737,8 @@ learn.Extd.ShpNt.aov <- aov_ez(
   between = "Group1"
 )
 learn.Extd.ShpNt.results <- apa_print(learn.Extd.ShpNt.aov)
-learn.Extd.ShpNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpNt.aov, ~Contra|Group1*Session)))
+learn.Extd.ShpNt.fup.ContraGroup1 <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpNt.aov, ~Contra|Group1)))
+learn.Extd.ShpNt.fup.ContraSession <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpNt.aov, ~Contra|Session)))
 ```
 
 #### Distractor Lateralised
@@ -775,7 +774,6 @@ learn.Extd.ColPd.aov <- aov_ez(
   between = "Group1"
 )
 learn.Extd.ColPd.results <- apa_print(learn.Extd.ColPd.aov)
-learn.Extd.ColPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ColPd.aov, ~Contra|Session*Group1)))
 grandDist <- allData %>%
   filter(GroupP == "Unchanged", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
@@ -807,11 +805,10 @@ learn.Extd.ShpPd.aov <- aov_ez(
   between = "Group1"
 )
 learn.Extd.ShpPd.results <- apa_print(learn.Extd.ShpPd.aov)
-learn.Extd.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Extd.ShpPd.aov, ~Contra|Session)))
 ```
 
 ```{r savelernExtdERPData}
-save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ColNt.fup, learn.Extd.ShpNt.fup, learn.Extd.ColPd.fup, learn.Extd.ShpPd.fup, file = "DataOutput/lernExtdERPANOVAs.RData")
+save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ShpNt.fup, learn.Extd.ShpNt.fup.ContraGroup1, learn.Extd.ShpNt.fup.ContraSession, file = "DataOutput/lernExtdERPANOVAs.RData")
 ```
 
 ```{r lernExtdERPPlot}
@@ -877,7 +874,7 @@ learn.Retr.ColNt.aov <- aov_ez(
   between = c("Group2","GroupP")
 )
 learn.Retr.ColNt.results <- apa_print(learn.Retr.ColNt.aov)
-learn.Retr.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ColNt.aov, ~Contra|Group2*GroupP)))
+learn.Retr.ColNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ColNt.aov, ~Contra|Group2)))
 grandTarget <- allData %>%
   filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
@@ -910,7 +907,6 @@ learn.Retr.ShpNt.aov <- aov_ez(
   between = c("Group2","GroupP")
 )
 learn.Retr.ShpNt.results <- apa_print(learn.Retr.ShpNt.aov)
-learn.Retr.ShpNt.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ShpNt.aov, ~Contra|Group2*GroupP)))
 ```
 
 #### Distractor Lateralised
@@ -946,7 +942,6 @@ learn.Retr.ColPd.aov <- aov_ez(
   between = c("Group2","GroupP")
 )
 learn.Retr.ColPd.results <- apa_print(learn.Retr.ColPd.aov)
-learn.Retr.ColPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ColPd.aov, ~Contra|GroupP)))
 grandDist <- allData %>%
   filter(Session == "Day3", Event == "Learn" & Stimulus == "Shape (Color mid)" & learnRej == 0) %>%
   mutate(sample = sample*srateMultiplier-baseline) %>%
@@ -978,11 +973,10 @@ learn.Retr.ShpPd.aov <- aov_ez(
   between = c("Group2","GroupP")
 )
 learn.Retr.ShpPd.results <- apa_print(learn.Retr.ShpPd.aov)
-learn.Retr.ShpPd.fup <- apa_print.emmGrid(pairs(emmeans(learn.Retr.ShpPd.aov, ~Contra|GroupP)))
 ```
 
 ```{r savelernRetrERPData}
-save(learn.Retr.ColNt.results, learn.Retr.ShpNt.results, learn.Retr.ColPd.results, learn.Retr.ShpPd.results, learn.Retr.ColNt.fup, learn.Retr.ShpNt.fup, learn.Retr.ColPd.fup, learn.Retr.ShpPd.fup,  file = "DataOutput/lernRetrERPANOVAs.RData")
+save(learn.Retr.ColNt.results, learn.Retr.ShpNt.results, learn.Retr.ColPd.results, learn.Retr.ShpPd.results, learn.Retr.ColNt.fup,  file = "DataOutput/lernRetrERPANOVAs.RData")
 ```
 
 ```{r lernRetrERPPlot}
