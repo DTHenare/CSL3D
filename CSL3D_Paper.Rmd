@@ -67,17 +67,17 @@ library(emmeans)
 
 # Introduction
 
-When the human visual system is confronted by complex, cluttered visual displays, selective attention is the process which allows us to focus our limited processing capacity on relevant objects and suppress irrelevant objects. Visual selective attention relies on a set of intereacting sub-systems which operate in concert to determine the current focus of attention. Bottom-up processing is one such system which attempts to focus attention on salient stimuli like bright lights, or pop-out features like a red berry on a green background. Conversely, top-down attention is a system which prioritises stimuli that match the current goals of an individual, for example when searching for your car in a busy carpark. Research has recently identified a third factor which influences the current focus of attention, referred to as selection history. As the name suggests, selection history refers to processes which directs attention toward stimuli because of an individual's previous experiences or associations with those particular stimuli. This is distinct from bottom-up and top-down processes in that these stimuli may not be particularly salient in an objective sense, nor relevant to the current goals of the individual.
+When the human visual system is confronted by complex, cluttered visual displays, selective attention allows us to focus our limited processing capacity on relevant objects while suppressing irrelevant objects. Visual selective attention relies on a set of intereacting sub-systems which operate in concert to determine the current focus of attention. Bottom-up processing is one such system which attempts to focus attention on salient stimuli like bright lights, or pop-out features like a red berry on a green background. Conversely, top-down attention is a system which prioritises stimuli that match the current goals of an individual, for example when searching for your car in a busy carpark. Research has recently identified a third factor which influences the current focus of attention, referred to as selection history. As the name suggests, selection history refers to processes which directs attention toward stimuli because of an individual's previous experiences or associations with those particular stimuli. This is distinct from bottom-up and top-down processes in that these stimuli may not be particularly salient in an objective sense, nor relevant to the current goals of the individual.
 
-Experimental evidence for the central role that selection history plays in attentional orienting has started to accumulate in the attention literature. Associating on object with reward, for example, has been shown to result in attention being oriented to that object even when it is not physically salient, and this persists when participants move on to different tasks where the target has changed and rewards are no longer being given. Eveidence for the effect of selection history also comes from intertrial priming, an effect observed in visual search tasks where target features change from trial to trial. Intertrial priming is the observation that when the target features repeat on two trials, participants respond significantly faster to the repetition than to other trials. Similarly, subtle statistical regularities in object location and display configuration have been shown to speed participant responses in a way which suggests that historic associations are incorporated in visual search and help to determine the locus of attention. Reward association, priming, and statistical regularity are three prominent lines of research demonstrating the role that selection history palys in attentional orienting, research has continued to build on these effects in order to understand the dynamics of selection history within the broader attention system.
+Experimental evidence for the central role that selection history plays in attentional orienting has started to accumulate in the attention literature. Associating on object with reward, for example, has been shown to result in attention being oriented to that object even when it is not physically salient, and this persists when participants move on to different tasks where the target has changed and rewards are no longer being given [@laurent2015valuable;@wang2018stimuli;@hickey2013reward;@donohue2016rapid]. Eveidence for the effect of selection history also comes from intertrial priming, an effect observed in visual search tasks where target features change from trial to trial. Intertrial priming is the observation that when the target features repeat on two trials, participants respond significantly faster to the repetition than to other trials [@fecteau2007priming;@nakayama2004short;@maljkovic1994priming;@wolfe2003changing]. Similarly, subtle statistical regularities in object location and display configuration have been shown to speed participant responses in a way which suggests that historic associations are incorporated in visual search and help to determine the locus of attention [@ferrante2018altering;@wang2018statistical;@failing2019spatial;@theeuwes2018visual;@theeuwes2019goal;@wang2018statistical]. Reward association, priming, and statistical regularity are three prominent lines of research demonstrating the role that selection history palys in attentional orienting, research has continued to build on these effects in order to understand the dynamics of selection history within the broader attention system.
 
-A central question of interest in this field of research is the extent to which selection history effects persist across time. Anderson, Laurent, and Yantis (2011a) used an experimental design where participants trained on a task which associated colours with reward, and then subsequently performed a test phase where they responded to shapes while coloured distractors were presented. Their results showed that distractors in the high value colour biased attention in the test phase more than distractors in the low value colour, but that this effect extinguished over repeated trials. On the other hand, when they repeated this task using a shorter test phase, and brought participants back after at least four days, results showed that the distractor effects persisted across days without any further training (Anderson, Laurent, & Yantis, 2011b). This effect has since been shown to persist not just for days following the initial session, but for up to 9 months after training (Anderson & Yantis, 2013).
+A central question of interest in this field of research is the extent to which selection history effects persist across time. @anderson_learned_2011 used an experimental design where participants were trained on a task which associated colours with reward, and then subsequently performed a test phase where they responded to shapes while coloured distractors were presented. Their results showed that distractors in the high value colour biased attention in the test phase more than distractors in the low value colour, but that this effect extinguished over repeated trials. On the other hand, when they repeated this task using a shorter test phase, and brought participants back after at least four days, results showed that the distractor effects persisted across days without any further training [@anderson2011value]. This effect has since been shown to persist not just for days following the initial session, but for up to 9 months after training [@anderson_persistence_2013].
 
-Similar persistence of selection history has been shown by @feldmann2015you using an experimental design that used even more general mechanisms of selection history that did not include explicit reward. In their version of the task, @feldmann2015you had participants perform a learning task where half of participants categorised colour singletons, and the other half categorised shape singletons. All participants also performed a search task where a shape singleton contained the target, and a colour singleton served as a distractor. Importantly, the shape and colour used in the search task were different from the shapes and colours presented during learning. Their results showed that participants who had learned to categorise colours in the learning task, were more distracted by the colour singleton in the search task relatively to participants who had learned to categorise shapes. This was taken as evidence that a history of attending to a feature dimension, like colour, can lead to increased attentional orienting to singletons in the dimension on a separate task. This was reinforced by ERP data which showed decreased shape selection, and increased distraction by colours for participants in the colour group, and these effects persisted when the two tasks were performed on separate days.
+Similar persistence of selection history has been shown by @feldmann2015you using an experimental design that used even more general mechanisms of selection history that did not include explicit reward. In their version of the task, @feldmann2015you had participants perform a learning task where half of participants categorised colour singletons, and the other half categorised shape singletons. All participants also performed a search task where a shape singleton contained the target, and a colour singleton served as a distractor. Importantly, the shape and colour used in the search task were different from the shapes and colours presented during learning. Their results showed that participants who had learned to categorise colours in the learning task, were more distracted by the colour singleton in the search task relative to participants who had learned to categorise shapes. This was taken as evidence that a history of attending to a feature dimension, like colour, can lead to increased attentional orienting to singletons in the dimension on a separate task. This was reinforced by ERP data which showed decreased shape selection, and increased distraction by colours for participants in the colour group, and these effects also persisted when the two tasks were performed on separate days.
 
 Further research has shown that selection history effects not only persist across time, but persist in the face of competition from top-down attentional control. The extent to which top-down goals can be used to overcome biases from selection history was investigate by @kadel2017selection using the paradigm developed by @feldmann2015you. In the original task, participants performed the learn trials and the search trials in a randomly intermixed fashion and therefore did not know which task they would perform on each trial. This means that participants in the colour group do not know whether they are about to categorise a colour, or search for the shape singleton on the next trial, and therefore could not use top-down control during search to counteract their selection history. @kadel2017selection on the other hand used versions where participants were either cued prior to the onset of a task display, or carried out the tasks in a fixed pattern (learn-learn-search-search-learn-learn etc.). Their results showed that selection history effects are still observed in these versions of the experiment and therefore selection history effects persist even when top-down control is increased. ERP components were also used to corroborate these effects and showed the same effects recorded by @feldmann2015you and therefore persistence of selection history effects when top-down control has been increased.
 
-In the current experiment, we use a modified version of the paradigm developed by @feldmann2015you to evaluate the development and persistence of selection history effects in two novel ways. Firstly, we aimed to understand how selection history develops as the learning and search is repeated across 3 separate days. Participants in our task were allocated to either colour or shape learning, and then performed this learning along with the search task across 3 days of training. We expected that if selection history effects continue to increase as learning continues then we would observe changes from day one to day three, whereas if the effects reach a maximum after an initial short learning session then no differences would be observed. Secondly, in light of evidence that top-down control cannot eliminate the effects of selection history, we sought to understand how selection history effects are impacted by the development of a novel, and contradictory selection history. To this end, half of the participants in our task swapped their learning assignment on day two of the experiment, that is, participants in the colour group had to start performing shape categorisation and participants in the shape group had to start performing colour categorisation. This design would allow us to see whether selection history operates in a first-come-first-served manner, preferentially directing attention to features that were focused on initially. Or whether selection history is more plastic and can be overwritten when the demands on the system change.
+In the current experiment, we use a modified version of the paradigm developed by @feldmann2015you to evaluate the development and persistence of selection history effects in two novel ways. Firstly, we aimed to understand how selection history develops as the learning and search is repeated across 3 separate days. Participants in our task were allocated to either colour or shape learning, and then performed this learning along with the search task across 3 days of training. We expected that if selection history effects continue to increase as learning continues then we would observe changes from day one to day three, whereas if the effects reach a maximum after an initial short learning session then no differences would be observed. Secondly, in light of evidence that top-down control cannot eliminate the effects of selection history, we sought to understand how selection history effects are impacted by the development of a novel, and contradictory selection history. To this end, half of the participants in our task swapped their learning assignment on day two of the experiment. That is, participants in the colour group had to start performing shape categorisation and participants in the shape group had to start performing colour categorisation. This design would allow us to see whether selection history operates in a first-come-first-served manner, preferentially directing attention to features that were a part of initial learning. Or whether selection history is more plastic and can be overwritten when the demands on the system change.
 
 # Methods
 
@@ -104,15 +104,21 @@ Each stimulus presented during the categorisation and search trials was presente
 (ref:stimDispFig) Example task displays for the categorisation (A) and search tasks (B). In each display, one singleton is lateralised and the other is on the midline in order to allow for the calculation of EEG activity elicited by the lateral stimulus. Participants performed 1152 trials in total, 50% of these were required to be categorisation trials (half of each display type) and 50% were required to be search trials (one third of each display type).
 
 ```{r stimDisplays, fig.cap = "(ref:stimDispFig)"}
-include_graphics("Figures/CSL-Choice trial displays.tiff", auto_pdf = FALSE)
+include_graphics("Figures/CSL3D trial displays.jpg", auto_pdf = FALSE)
 ```
 
 ## Experimental procedure
 
-Participants came in for three separate sessions and performed two different tasks within each session, a categorisation task and a search task (described in detail below). In all sessions, participants were seated in a comfortable chair in a dimly lit room with their eyes 100cm away from the screen (LCD-TN Samsung Syncmaster 2233). An Erogodex DX1 response pad was placed on their lap with 6 keys arranged so that participants could use the index and middle finger of each hand to respond to the task, while the thumb on each hand could be used to perform task selection between trials. Stimulus presentation and response collection was controlled by E-Prime 2.0 and audio feedback was presented by two stereo speakers (Logitech Z120 2.0) placed behind the screen. 
+Participants came in for three separate sessions and performed the two different tasks within each session (categorisation task and a search task). In all sessions, participants were seated in a comfortable chair in a dimly lit room with their eyes 100cm away from the screen (LCD-TN Samsung Syncmaster 2233). An Erogodex DX1 response pad was placed on their lap with 6 keys arranged so that participants could use the index and middle finger of each hand to respond to the task, while the thumb on each hand could be used to perform task selection between trials. Stimulus presentation and response collection was controlled by E-Prime 2.0 and audio feedback was presented by two stereo speakers (Logitech Z120 2.0) placed behind the screen. 
 In session one, participants were first familiarised with the categorisation task while feedback was provided, before continuing to a mixed practice block where categorisation and search trials were randomly interleaved. Particpants then began 18 blocks of 64 trials where the two tasks were randomly interleaved and EEG was recorded, for a total of 1152 trials (50% categorisation, 50% search). 
 Session two was the relearning session where participants were required to relearn some part of the categorisation task depending on their group assignment. Half of the participants had to switch feature dimension in the categorisation task. Those in the colour-shape group for example, had categorised coloured stimuli in the first session, but had to switch to shape categorisation in session two. Likewise, participants in the shape-colour group who started with shape categorisation in the first session had to switch to colour categorisation. The other half of participants (those in the colour-colour, and shape-shape group) continued to categorise the same feature dimension however they had to switch response assignment. For example, if a participant in the colour group had learned to push key 1 for green and key 2 for blue, they would now have to push key 1 for blue and key 2 for green. The search task remained the same for all groups and this session contained only 4 blocks of 64 trials, for a total of 256 trials (50% categorisation, 50% search). EEG was not recorded in session two. 
 In session three, all subjects continued with the tasks that they had learned in session two, however the task ran for 27 blocks of 32 trials (864 total, 50% categorisation and 50% search) and EEG was recorded.
+
+(ref:expDesignFig) Outline of the experimental design. 40 participants were recruited and assigned randomly to either the colour or shape group on Day1. One Day2, half of the participants in each group were made to switch categorisation assignments resulting in 4 groups in the final session on Day3. Colour categorisers who had either an unchanged, or changed selection history, and shape cateogrisers with either an unchange, or changed selection history.
+
+```{r expDesign, fig.cap = "(ref:expDesignFig)"}
+include_graphics("Figures/CSL3D design.jpg", auto_pdf = FALSE)
+```
 
 ## EEG recording
 
@@ -132,9 +138,7 @@ For behavioural analyses we removed trials with abnormally long response times (
 
 ### ERP analyses
 
-In the categorisation task, participants had to be excluded because less than 70% of the trials were left in the categorisation task (equivalent to an average of 202 trials remaining in each condition), or because their switch rate between the tasks was less than 0.2. Our analyses focused on two components of interest, the N$_{\text{T}}$ and P$_{\text{D}}$. In order to determine the time range for the N$_{\text{T}}$, a grand average ERP of all participants was created for lateralised predictor trials (colour singleton for colour group participants and shape singleton for shape participants). The peak negativity that occurred later than 200ms post-stimulus was defined as the Nt, and a 50ms time window was centred on this timepoint producing a window from 206 to 256ms. For the P$_{\text{D}}$ component, we created a grand average ERP for lateralised non-predictor trials (the shape singleton for the colour group and the colour singleton for the shane group), identified the peak positivity that occurred later than 200ms poststimulus and centred a 50ms window on this timepoint which produced a window from 237 to 287ms.
-
-Five participants were excluded because less than 85% of trials remained in the search task after artifact rejection (equivalent to an average of 163 trials remaining in each condition), or their switch rate between the tasks was less than 0.2. We again focused analyses on the N$_{\text{T}}$ and P$_{\text{D}}$ components. To select the N$_{\text{T}}$ time window we created a grand average of all participants for trials with a lateralised target, identified the peak negativity that occurred later than 200ms poststimulus and centred a 50ms window on this time point. This produced a time range of 227 to 277ms post-stimulus onset. For the P$_{\text{D}}$ component, we created a grand average ERP for trials with a lateralised distractor, identified the peak positivity that occurred later than 200ms poststimulus and centred a 50ms window on this timepoint which produced a window from 264 to 314ms.
+Participants were excluded if more than 30% of their trials were excluded in either the learning or search task, resulting in 3 exclusions. Our analyses focused on two components of interest, the N$_{\text{T}}$ and P$_{\text{D}}$. To identify the component time windows for each analysis, we collapsed across all participants and all independent variables to create a grand average ERP. The determine the N$_{\text{T}}$ time window, we centred a 50ms window on the peak negativity between 150 and 350ms post-stimulus from the grand average ERP. For the P$_{\text{D}}$, we centred a 50ms window on the peak positivty that occurred later than 200ms post-stimulus.
 
 
 # Results
@@ -146,6 +150,18 @@ load("DataOutput/behavANOVAs.RData")
 ```
 
 ### Categorisation trials
+
+(ref:lernRTCaption) RT in the learning task showed a main effect of session (participants got slower by day 3). There were no other significant effects/interactions.
+
+```{r loadlernrtPlot, fig.cap = "(ref:lernRTCaption)"}
+include_graphics("Figures/Behav2.tiff", auto_pdf = FALSE)
+```
+
+(ref:lernAccCaption) Accuracy in the learning task showed a main effect of session (participants got less accurate by day 3). There were no other significant effects/interactions.
+
+```{r loadlernaccPlot, fig.cap = "(ref:lernAccCaption)"}
+include_graphics("Figures/Behav1.tiff", auto_pdf = FALSE)
+```
 
 #### Initial training.
 
@@ -162,25 +178,33 @@ To evaluate the effects of retraining we focussed on data from Day3 and used a 2
 
 ### Search trials
 
+(ref:srchRTCaption) RT in the search task showed a main effect of distractor presence (distractor interference effect) which interacted with group (larger interference for the colour group). For participants who don't change learning assignment, distractor interference decreases by day 3 (not different for shape vs colour groups). 
+
+```{r loadsrchrtPlot, fig.cap = "(ref:srchRTCaption)"}
+include_graphics("Figures/Behav4.tiff", auto_pdf = FALSE)
+```
+
+(ref:srchAccCaption) Accuracy in the search task showed a main effect of session (participants got more accurate by day 3). There were no other significant effects/interactions.
+
+```{r loadsrchaccPlot, fig.cap = "(ref:srchAccCaption)"}
+include_graphics("Figures/Behav3.tiff", auto_pdf = FALSE)
+```
+
 #### Initial training.
 
 When focussing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate the effect of group (colour vs shape) and dsitractor presence (present vs absent) on response times in the search task. The results showed no significiant main effect of group (`r apa_print(srch.rt.init.aov)$full_result$InitSess`), however there was a significant main effect of distractor presence (`r apa_print(srch.rt.init.aov)$full_result$CompCond`) with participants performing slower in the presence of a coloured distractor, and a significant interaction between gorup and distractor presence (`r apa_print(srch.rt.init.aov)$full_result$InitSess_CompCond`). Follow-up tests on this analysis revealed that the distractor interference effect was larger for participants in the colour group.
 
 #### Extended training.
 
-For participants whose categorisation task remained unchanged across the 3 days, a 2x2x2 mixed ANOVA evaluated the effects of group (colour vs shape), session (Day1 vs Day3), and distractor presence (present vs absent) on response times. The results showed no significant main effect of group (`r apa_print(srch.rt.extd.aov)$full_result$InitSess`), however there were significant main effeccts of both session (`r apa_print(srch.rt.extd.aov)$full_result$Session`) and distractor presence (`r apa_print(srch.rt.extd.aov)$full_result$CompCond`). Distractor presence also showed significant interactions with group (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_CompCond`) where we see significantly larger distractor interference for participants in the colour group as compared to the shape group. Distractor presence also interacted with session (`r apa_print(srch.rt.extd.aov)$full_result$Session_CompCond`), where distractor intereference decreased by the final session. There was no significant interaction between group and session (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_Session`), and the three-way interaction between group, session, and distractor presence only approached significance (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_Session_CompCond`). 
+For participants whose categorisation task remained unchanged across the 3 days, a 2x2x2 mixed ANOVA evaluated the effects of group (colour vs shape), session (Day1 vs Day3), and distractor presence (present vs absent) on response times. The results showed no significant main effect of group (`r apa_print(srch.rt.extd.aov)$full_result$InitSess`), however there were significant main effeccts of both session (`r apa_print(srch.rt.extd.aov)$full_result$Session`) and distractor presence (`r apa_print(srch.rt.extd.aov)$full_result$CompCond`). Distractor presence also showed significant interactions with group (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_CompCond`) where we see significantly larger distractor interference for participants in the colour group (`r srch.rt.extd.initxComp.fup$full_result$TD_TO_Colour`) as compared to the shape group (`r srch.rt.extd.initxComp.fup$full_result$TD_TO_Shape`). Distractor presence also interacted with session (`r apa_print(srch.rt.extd.aov)$full_result$Session_CompCond`), where distractor intereference present on Day1 (`r srch.rt.extd.SessxComp.fup$full_result$TD_TO_X1`), decreased by Day3 (`r srch.rt.extd.SessxComp.fup$full_result$TD_TO_X3`). There was no significant interaction between group and session (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_Session`), and the three-way interaction between group, session, and distractor presence only approached significance (`r apa_print(srch.rt.extd.aov)$full_result$InitSess_Session_CompCond`). 
 
 This analysis was repeated using search task accuracy as the dependent variable. Results showed a significant main effect of session (`r apa_print(srch.acc.extd.aov)$full_result$Session`), where participants were more accurate in the final session, but no main effect of neither group (`r apa_print(srch.acc.extd.aov)$full_result$InitSess`), nor distractor presence (`r apa_print(srch.acc.extd.aov)$full_result$CompCond`). We also see no interactions between group and session (`r apa_print(srch.acc.extd.aov)$full_result$InitSess_Session`), group and distractor presence (`r apa_print(srch.acc.extd.aov)$full_result$InitSess_CompCond`), and session and distractor presence (`r apa_print(srch.acc.extd.aov)$full_result$Session_CompCond`). Finally, the three-way interaction between group, session, and distractor presence was also not significant (`r apa_print(srch.acc.extd.aov)$full_result$InitSess_Session_CompCond`).
 
 #### Retraining.
 
-To evaluate the effects of retraining we focussed on data from Day3 and used a 2x2x2 mixed ANOVA to evaluate the effect of Day3 categorisation group (colour vs shape), training history (changed vs unchanged), and distractor presence (present vs absent) on response times. The results showed no significant effect of training history (`r apa_print(srch.rt.retr.aov)$full_result$retrain`), however we did see a significant main effect of distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$CompCond`) where participants were slower in the presence of a salient distractor, and the main effect of group was approaching significance (`r apa_print(srch.rt.retr.aov)$full_result$FinSess`). We saw no significant interactions between group and training history (`r apa_print(srch.rt.retr.aov)$full_result$retrain_FinSess`), nor training history and distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$retrain_CompCond`), however we did see a significant interaction between group and distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$FinsSess_CompCond`). As before, this was a consequence of larger distractor costs for participants in the colour group. The significant three-way interaction between group, training history, and distractor presence was not significant (`r apa_print(srch.rt.retr.aov)$full_result$retrain_FinSess_CompCond`).
+To evaluate the effects of retraining we focussed on data from Day3 and used a 2x2x2 mixed ANOVA to evaluate the effect of Day3 categorisation group (colour vs shape), training history (changed vs unchanged), and distractor presence (present vs absent) on response times. The results showed no significant effect of training history (`r apa_print(srch.rt.retr.aov)$full_result$retrain`), however we did see a significant main effect of distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$CompCond`) where participants were slower in the presence of a salient distractor, and the main effect of group was approaching significance (`r apa_print(srch.rt.retr.aov)$full_result$FinSess`). We saw no significant interactions between group and training history (`r apa_print(srch.rt.retr.aov)$full_result$retrain_FinSess`), nor training history and distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$retrain_CompCond`), however we did see a significant interaction between group and distractor presence (`r apa_print(srch.rt.retr.aov)$full_result$FinsSess_CompCond`). Follow-up comparisons revealed a significant distractor interference effect was present for participants in the colour group (`r srch.rt.retr.fup$full_result$TD_TO_Colour`), but not he shape group (`r srch.rt.retr.fup$full_result$TD_TO_Shape`). The significant three-way interaction between group, training history, and distractor presence was not significant (`r apa_print(srch.rt.retr.aov)$full_result$retrain_FinSess_CompCond`).
 
-(ref:behavDistInt) Response time cost (response time in distractor present trials minus RT in distractor absent trials) caused by the presence of a coloured distractor in the search task. Participants assigned to respond to colour in the categorisation task (shown in green) had significantly higher costs during the search task than participants assigned to repsond to shape in the categorisation task (shown in grey). Individual response time costs are depicted as dots alongside a boxplot and violin plot to visualise the range and distribution of costs for each group.
-
-```{r DistIntViolin, fig.cap = "(ref:behavDistInt)"}
-#include_graphics("Figures/DistIntViolin.jpg", auto_pdf = FALSE)
-```
+This analysis was repeated using search task accuracy as the dependent variable. Results did not show any significant main effects of distractor presence (`r apa_print(srch.acc.retr.aov)$full_result$CompCond`), group (`r apa_print(srch.acc.retr.aov)$full_result$FinSess`), nor training history (`r apa_print(srch.acc.retr.aov)$full_result$retrain`). We also see no interactions between group and distractor presence (`r apa_print(srch.acc.retr.aov)$full_result$FinSess_CompCond`), group and training history (`r apa_print(srch.acc.retr.aov)$full_result$FinSess_retrain`), and distractor presence and training history (`r apa_print(srch.acc.retr.aov)$full_result$CompCond_retrain`). Finally, the three-way interaction between group, distractor presence, and training history was also not significant (`r apa_print(srch.acc.retr.aov)$full_result$FinSess_CompCond_retrain`).
 
 ## ERP results
 
@@ -196,7 +220,9 @@ When focusing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate t
 
 ##### Lateralised colour singleton
 
-```{r loadlernInitPlot}
+(ref:lernInitERPcaption) ERPs from Day1. Colour singletons elicit significant lateralised positivty for the shape group, NT is not significant for colour group. PD is significant for the colour group. Shape singletons elicit an NT for the shape group but not the colour group, and a PD for both groups.
+
+```{r loadlernInitPlot, fig.cap = "(ref:lernInitERPcaption)"}
 include_graphics("Figures/lernInitERPs.tiff", auto_pdf = FALSE)
 ```
 
@@ -204,45 +230,11 @@ The results showed a significant main effect of group on NT amplitude (`r learn.
 
 The results for the PD time range showed no significant main effect of group on component amplitude (`r learn.Init.ColPd.results$full_result$Group1`), however there was a main effect of electrode laterality (`r learn.Init.ColPd.results$full_result$Contra`), and an interaction between group and laterality (`r learn.Init.ColPd.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed that the colour singleton elicited a significant PD for participants in the colour group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_C`), but no lateralised difference was detected for the shape group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_S`).
 
-```{r initColNtresultsTable, results='asis'}
-apa_table(
-  learn.Init.ColNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
-```{r initColNtfupTable, results='asis'}
-row.names(learn.Init.ColNt.fup$table) =c()
-apa_table(
-  learn.Init.ColNt.fup$table
-  , caption = "Follow-up comparisons for the target only trials"
-  , escape = FALSE
-)
-```
-
 ##### Lateralised shape singleton
 
 The results showed a significant main effect of group on NT amplitude (`r learn.Init.ShpNt.results$full_result$Group1`), however there was no main effect of electrode laterality (`r learn.Init.ShpNt.results$full_result$Contra`). We did see an interaction between group and laterality (`r learn.Init.ShpNt.results$full_result$Group1_Contra`), and follow-up comparisons showed a significant NT was elicited by shape singletons for participants in the shape group (`r learn.Init.ShpNt.fup$full_result$Contralateral_Ipsilateral_S`) but no lateralised difference was detected for the colour group (`r learn.Init.ShpNt.fup$full_result$Contralateral_Ipsilateral_C`).
 
 The results for the PD time range showed no significant main effects of group (`r learn.Init.ShpPd.results$full_result$Group1`), however we did see a main effect of electrode laterality (`r learn.Init.ShpPd.results$full_result$Contra`). There was no significant interaction between group and laterality on component amplitude (`r learn.Init.ShpPd.results$full_result$Group1_Contra`).
-
-```{r initShpNtresultsTable, results='asis'}
-apa_table(
-  learn.Init.ShpNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r initShpNtfupTable, results='asis'}
-row.names(learn.Init.ShpNt.fup$table) =c()
-apa_table(
-  learn.Init.ShpNt.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
 
 #### Extended training
 
@@ -254,7 +246,9 @@ For participants whose categorisation task remained unchanged across the 3 days,
 
 ##### Lateralised colour singleton
 
-```{r loadlernExtdPlot}
+(ref:lernExtdERPcaption) ERPs for extended training (groups who categorise the same feature across all 3 days). Colour singleton elicits NT and PD, these don't interact with group, or session. Shape singleton elicits NT for shape group but not colour group, and NT increases from day1 to day3. Shape singleton elicits a PD that doesn't interact with group or session.
+
+```{r loadlernExtdPlot, fig.cap = "(ref:lernExtdERPcaption)"}
 include_graphics("Figures/lernExtdERPs.tiff", auto_pdf = FALSE)
 ```
 
@@ -262,36 +256,11 @@ The results for the NT time range showed no significant main effect of group (`r
 
 The results for the PD time range showed no significant main effect of group (`r learn.Extd.ColPd.results$full_result$Group1`), however there was a significant main effect of session(`r learn.Extd.ColPd.results$full_result$Session`), and electrode laterality (`r learn.Extd.ColPd.results$full_result$Contra`). There was no significant interaction between group and electrode laterality (`r learn.Extd.ColPd.results$full_result$Group1_Contra`), no significant interaction between group and sesssion (`r learn.Extd.ColPd.results$full_result$Group1_Session`), no significant interaction between laterality and session (`r learn.Extd.ColPd.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r learn.Extd.ColPd.results$full_result$Group1_Contra_Session`). 
 
-```{r ExtdColNtresultsTable, results='asis'}
-apa_table(
-  learn.Extd.ColNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
 ##### Lateralised shape singleton
 
 The results of the NT time range showed a significant main effect of group (`r learn.Extd.ShpNt.results$full_result$Group1`) and electrode laterality (`r learn.Extd.ShpNt.results$full_result$Contra`), however there was no main effect of session (`r learn.Extd.ShpNt.results$full_result$Session`). There was a significant interaction between group and electrode laterality (`r learn.Extd.ShpNt.results$full_result$Group1_Contra`) with follow-up comparisons showing a significant NT for participants in the shape group (`r learn.Extd.ShpNt.fup.ContraGroup1$full_result$Contralateral_Ipsilateral_S`), but not for participants in the colour group (`r learn.Extd.ShpNt.fup.ContraGroup1$full_result$Contralateral_Ipsilateral_C`). There was also a significant interaction between laterality and session (`r learn.Extd.ShpNt.results$full_result$Contra_Session`), and follow-up comparisons showed that there was a significant NT present on Day1 (`r learn.Extd.ShpNt.fup.ContraSession$full_result$Contralateral_Ipsilateral_Day1`) which increased in amplitude on Day3 (`r learn.Extd.ShpNt.fup.ContraSession$full_result$Contralateral_Ipsilateral_Day3`).  There was no significant interaction between group and sesssion (`r learn.Extd.ShpNt.results$full_result$Group1_Session`), and no significant three-way interaction between group, laterality, and session (`r learn.Extd.ShpNt.results$full_result$Group1_Contra_Session`).
 
 The results of the PD timerange showed no significant main effect of group (`r learn.Extd.ShpPd.results$full_result$Group1`), however there was a significant main effect of both electrode laterality (`r learn.Extd.ShpPd.results$full_result$Contra`) indicating the presence of a PD, and a main effect of session (`r learn.Extd.ShpPd.results$full_result$Session`). There was no significant interaction between group and electrode laterality (`r learn.Extd.ShpPd.results$full_result$Group1_Contra`), laterality and session (`r learn.Extd.ShpPd.results$full_result$Contra_Session`),  group and sesssion (`r learn.Extd.ShpPd.results$full_result$Group1_Session`), and no significant three-way interaction between group, laterality, and session (`r learn.Extd.ShpPd.results$full_result$Group1_Contra_Session`).
-
-```{r ExtdShpNtresultsTable, results='asis'}
-apa_table(
-  learn.Extd.ShpNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r ExtdShpNtfupTable, results='asis'}
-row.names(learn.Extd.ShpNt.fup$table) =c()
-apa_table(
-  learn.Extd.ShpNt.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
 
 #### Retraining
 
@@ -303,7 +272,9 @@ To evaluate the effects of retraining we focussed on data from Day3 and used a 2
 
 ##### Lateralised colour singleton
 
-```{r loadlernRetrPlot}
+(ref:lernRetrERPcaption) Retraining ERPs - data from day3 split depending on group (whether they are currently categorising shape or colour) and training history (whether they have changed categorisation or not). Colour singleton elicits no NT for colour group, and significant positivity in the NT time range for the shape group. Colour singleton elicits a PD which does not interact with gorup or training history.
+
+```{r loadlernRetrPlot, fig.cap = "(ref:lernRetrERPcaption)"}
 include_graphics("Figures/lernRetrERPs.tiff", auto_pdf = FALSE)
 ```
 
@@ -311,45 +282,11 @@ The results for the NT time range showed no significant main effects of electrod
 
 The results for the PD time range showed a significant main effect of electrode laterality (`r learn.Retr.ColPd.results$full_result$Contra`), indicating the presence of a PD. There was no significant main effects of group (`r learn.Retr.ColPd.results$full_result$Group2`) and training history (`r learn.Retr.ColPd.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r learn.Retr.ColPd.results$full_result$Group2_Contra`), group and training history (`r learn.Retr.ColPd.results$full_result$Group2_GroupP`), and laterality and training history (`r learn.Retr.ColPd.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r learn.Retr.ColPd.results$full_result$Group2_GroupP_Contra`).
 
-```{r RetrColNtresultsTable, results='asis'}
-apa_table(
-  learn.Retr.ColNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
-```{r RetrColNtfupTable, results='asis',eval = FALSE, echo = FALSE}
-row.names(learn.Retr.ColNt.fup$table) =c()
-apa_table(
-  learn.Retr.ColNt.fup$table
-  , caption = "Follow-up comparisons for the target only trials"
-  , escape = FALSE
-)
-```
-
 ##### Lateralised shape singleton
 
 The results for the NT time range showed a significant main effect of electrode laterality (`r learn.Retr.ShpNt.results$full_result$Contra`), indicating that an NT was elicited by the shape stimulus. We saw no significant main effects of group (`r learn.Retr.ShpNt.results$full_result$Group2`) and training history (`r learn.Retr.ShpNt.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r learn.Retr.ShpNt.results$full_result$Group2_Contra`), group and training history (`r learn.Retr.ShpNt.results$full_result$Group2_GroupP`), and laterality and training history (`r learn.Retr.ShpNt.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r learn.Retr.ShpNt.results$full_result$Group2_GroupP_Contra`).
 
 The results for the PD time range showed a significant main effect of electrode laterality (`r learn.Retr.ShpPd.results$full_result$Contra`), indicating that a PD was elicited by the shape stimulus. We saw no significant main effects of group (`r learn.Retr.ShpPd.results$full_result$Group2`) and training history (`r learn.Retr.ShpPd.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r learn.Retr.ShpPd.results$full_result$Group2_Contra`), group and training history (`r learn.Retr.ShpPd.results$full_result$Group2_GroupP`), and laterality and training history (`r learn.Retr.ShpPd.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r learn.Retr.ShpPd.results$full_result$Group2_GroupP_Contra`).
-
-```{r RetrShpNtresultsTable, results='asis'}
-apa_table(
-  learn.Retr.ShpNt.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r RetrShpNtfupTable, results='asis',eval = FALSE, echo = FALSE}
-row.names(learn.Retr.ShpNt.fup$table) =c()
-apa_table(
-  learn.Retr.ShpNt.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
 
 ### Search
 
@@ -363,70 +300,21 @@ When focussing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate 
 
 ##### Target response - Distractor absent trials
 
-```{r loadSrchInitPlot}
+(ref:srchInitERPcaption) Search ERPs on Day1. NT present for the shape group for targets presented alone and targets presented with distractors. PD was present for both groups but larger for the colour group.
+
+```{r loadSrchInitPlot, fig.cap = "(ref:srchInitERPcaption)"}
 include_graphics("Figures/SrchInitERPs.tiff", auto_pdf = FALSE)
 ```
 
 The results showed no significant main effect of group on NT amplitude (`r search.Init.TO.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.TO.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.TO.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant NT was elicited by targets for participants in the shape group (`r search.Init.TO.fup$full_result$Contralateral_Ipsilateral_S`) but not the colour group (`r search.Init.TO.fup$full_result$Contralateral_Ipsilateral_C`).
 
-```{r initTOresultsTable, results='asis'}
-apa_table(
-  search.Init.TO.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
-```{r initTOfupTable, results='asis'}
-row.names(search.Init.TO.fup$table) =c()
-apa_table(
-  search.Init.TO.fup$table
-  , caption = "Follow-up comparisons for the target only trials"
-  , escape = FALSE
-)
-```
-
 ##### Target response - Distractor present trials
 
 The results showed no significant main effect of group on NT amplitude (`r search.Init.TD.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.TD.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.TD.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant NT was elicited by targets for participants in the shape group (`r search.Init.TD.results$full_result$Contralateral_Ipsilateral_S`) and that the NT was present but reduced for the colour group (`r search.Init.TD.results$full_result$Contralateral_Ipsilateral_C`).
 
-```{r initTDresultsTable, results='asis'}
-apa_table(
-  search.Init.TD.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r initTDfupTable, results='asis'}
-row.names(search.Init.TD.fup$table) =c()
-apa_table(
-  search.Init.TD.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
-
 ##### Distractor response - Distractor present trials
 
 The results showed no significant main effect of group on PD amplitude (`r search.Init.DTpd.results$full_result$Group1`), however there was a main effect of electrode laterality (`r search.Init.DTpd.results$full_result$Contra`), and an interaction between group and laterality (`r search.Init.DTpd.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant PD was elicited by targets for participants in the shape group (`r search.Init.DTpd.results$full_result$Contralateral_Ipsilateral_S`) and that the PD was enhanced for the colour group (`r search.Init.DTpd.results$full_result$Contralateral_Ipsilateral_C`).
-
-```{r initDTpdresultsresultsTable, results='asis'}
-apa_table(
-  search.Init.TO.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
-  , escape = FALSE
-)
-```
-
-```{r initDTpdfupTable, results='asis'}
-row.names(search.Init.DTpd.fup$table) =c()
-apa_table(
-  search.Init.DTpd.fup$table
-  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
-  , escape = FALSE
-)
-```
 
 #### Extended training
 
@@ -434,82 +322,31 @@ apa_table(
 load('DataOutput/SrchExtdERPANOVAs.RData')
 ```
 
-```{r loadSrchExtdNOSUBPlot}
-include_graphics("Figures/SrchExtdERPsNOSUB.tiff", auto_pdf = FALSE)
-```
-
 For participants whose categorisation task remained unchanged across the 3 days, a 2x2x2 mixed ANOVA evaluated the effects of group (colour vs shape), electrode laterality (contralateral vs ipsilateral), and session (Day1 vs Day3) on ERP component amplitude. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets int he presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
 
 ##### Target response - Distractor absent trials
 
-```{r loadSrchExtdPlot}
+(ref:srchRetrERPcaption) ERPs for extended training (groups who categorise the same feature across all 3 days). NT present for shape group in the target only and target-distractor trials. NT absent for colour group in the target only trials and present but reduced in the target-distractor trials. PD is present in both sessions but reduced by Day3, doesn't interact with group.
+
+```{r loadSrchExtdPlot, fig.cap = "(ref:srchRetrERPcaption)"}
 include_graphics("Figures/SrchExtdERPs.tiff", auto_pdf = FALSE)
 ```
 
 The results showed no significant main effect of group (`r search.Extd.TO.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.TO.results$full_result$Contra`) and session (`r search.Extd.TO.results$full_result$Session`). There was a significant interaction between group and electrode laterality (`r search.Extd.TO.results$full_result$Group1_Contra`) with follow-up comparisons showing a significant NT for participants in the shape group (`r search.Extd.TO.fup$full_result$Contralateral_Ipsilateral_S`) but not for participants in the colour group (`r search.Extd.TO.fup$full_result$Contralateral_Ipsilateral_C`). There was no significant interaction between group and sesssion (`r search.Extd.TO.results$full_result$Group1_Session`), laterality and session (`r search.Extd.TO.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.TO.results$full_result$Group1_Contra_Session`). 
 
-```{r ExtdTOresultsTable, results='asis'}
-apa_table(
-  search.Extd.TO.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
-```{r ExtdTOfupTable, results='asis'}
-row.names(search.Extd.TO.fup$table) =c()
-apa_table(
-  search.Extd.TO.fup$table
-  , caption = "Follow-up comparisons for the target only trials"
-  , escape = FALSE
-)
-```
-
 ##### Target response - Distractor present trials
 
 The results showed no significant main effect of group (`r search.Extd.TD.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.TD.results$full_result$Contra`) and session (`r search.Extd.TD.results$full_result$Session`). There was a significant interaction between group and electrode laterality (`r search.Extd.TD.results$full_result$Group1_Contra`) with follow-up comparisons showing a significant NT for participants in the shape group (`r search.Extd.TD.fup$full_result$Contralateral_Ipsilateral_S`) and a present but reduced NT for participants in the colour group (`r search.Extd.TD.fup$full_result$Contralateral_Ipsilateral_C`). There was no significant interaction between group and sesssion (`r search.Extd.TD.results$full_result$Group1_Session`), laterality and session (`r search.Extd.TD.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.TD.results$full_result$Group1_Contra_Session`). 
-
-```{r ExtdTDresultsTable, results='asis'}
-apa_table(
-  search.Extd.TD.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r ExtdTDfupTable, results='asis'}
-row.names(search.Extd.TD.fup$table) =c()
-apa_table(
-  search.Extd.TD.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
 
 ##### Distractor response - Distractor present trials
 
 The results showed no significant main effect of group (`r search.Extd.DTpd.results$full_result$Group1`), however there were significant main effects of both electrode laterality (`r search.Extd.DTpd.results$full_result$Contra`) and session (`r search.Extd.DTpd.results$full_result$Session`). There was a significant interaction between electrode laterality and session (`r search.Extd.DTpd.results$full_result$Contra_Session`) with follow-up comparisons showing a significant PD for participants on Day1 (`r search.Extd.DTpd.fup$full_result$Contralateral_Ipsilateral_Day1`) and a reduced PD by Day3 (`r search.Extd.DTpd.fup$full_result$Contralateral_Ipsilateral_Day3`). There was no significant interaction between group and sesssion (`r search.Extd.DTpd.results$full_result$Group1_Session`), group and laterality (`r search.Extd.DTpd.results$full_result$Contra_Session`), and no significant three-way interaction between group, laterality, and session (`r search.Extd.DTpd.results$full_result$Group1_Contra_Session`). 
 
-```{r ExtdDTpdresultsresultsTable, results='asis'}
-apa_table(
-  search.Extd.DTpd.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
-  , escape = FALSE
-)
-```
-
-```{r ExtdDTpdfupTable, results='asis'}
-row.names(search.Extd.DTpd.fup$table) =c()
-apa_table(
-  search.Extd.DTpd.fup$table
-  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
-  , escape = FALSE
-)
-```
-
 #### Retraining
 
-```{r loadRetrERPResults}
+(ref:srchRetrunsubERPcaption) test caption
+
+```{r loadRetrERPResults, fig.cap = "(ref:srchRetrunsubERPcaption)"}
 load('DataOutput/SrchRetrERPANOVAs.RData')
 ```
 
@@ -517,70 +354,21 @@ To evaluate the effects of retraining we focussed on data from Day3 and used a 2
 
 ##### Target response - Distractor absent trials
 
-```{r loadSrchRetrPlot}
+(ref:srchRetrERPcaption) Retraining ERPs - data from day3 split depending on group (whether they are currently categorising shape or colour) and training history (whether they have changed categorisation or not). NT present for lateralised targets (in target only as well as target-distractor trials), but it doesn't interact with group or training history. PD was present for distractors but did not significantly interact with group or training history.
+
+```{r loadSrchRetrPlot, fig.cap = "(ref:srchRetrERPcaption)"}
 include_graphics("Figures/SrchRetrERPs.tiff", auto_pdf = FALSE)
 ```
 
 The results showed a significant main effect of electrode laterality (`r search.Retr.TO.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.TO.results$full_result$Group2`) and training history (`r search.Retr.TO.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.TO.results$full_result$Group2_Contra`), group and training history (`r search.Retr.TO.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.TO.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.TO.results$full_result$Group2_GroupP_Contra`).
 
-```{r RetrTOresultsTable, results='asis'}
-apa_table(
-  search.Retr.TO.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target only nt amplitude"
-  , escape = FALSE
-)
-```
-
-```{r RetrTOfupTable, results='asis',eval = FALSE, echo = FALSE}
-row.names(search.Retr.TO.fup$table) =c()
-apa_table(
-  search.Retr.TO.fup$table
-  , caption = "Follow-up comparisons for the target only trials"
-  , escape = FALSE
-)
-```
-
 ##### Target response - Distractor present trials
 
 The results showed a significant main effect of electrode laterality (`r search.Retr.TD.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.TD.results$full_result$Group2`) and training history (`r search.Retr.TD.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.TD.results$full_result$Group2_Contra`), group and training history (`r search.Retr.TD.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.TD.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.TD.results$full_result$Group2_GroupP_Contra`).
 
-```{r RetrTDresultsTable, results='asis'}
-apa_table(
-  search.Retr.TD.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on target nt amplitude (in the presence of distraction)"
-  , escape = FALSE
-)
-```
-
-```{r RetrTDfupTable, results='asis',eval = FALSE, echo = FALSE}
-row.names(search.Retr.TD.fup$table) =c()
-apa_table(
-  search.Retr.TD.fup$table
-  , caption = "Follow-up comparisons for lateralised targets when a distractor is present"
-  , escape = FALSE
-)
-```
-
 ##### Distractor response - Distractor present trials
 
-The results showed a significant main effect of electrode laterality (`r search.Retr.DTpd.results$full_result$Contra`), indicating that an NT was elicited by targets. We saw no significant main effects of group (`r search.Retr.DTpd.results$full_result$Group2`) and training history (`r search.Retr.DTpd.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.DTpd.results$full_result$Group2_Contra`), group and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.DTpd.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP_Contra`).
-
-```{r RetrDTpdresultsresultsTable, results='asis'}
-apa_table(
-  search.Retr.TO.results$table
-  , caption = "Results of the 2x2 ANOVA testing the effect of laterality and group on distractor pd amplitude"
-  , escape = FALSE
-)
-```
-
-```{r RetrDTpdfupTable, results='asis',eval = FALSE, echo = FALSE}
-row.names(search.Retr.DTpd.fup$table) =c()
-apa_table(
-  search.Retr.DTpd.fup$table
-  , caption = "Follow-up comparisons for pd amplitude elicited by lateralised distractors"
-  , escape = FALSE
-)
-```
+The results showed a significant main effect of electrode laterality (`r search.Retr.DTpd.results$full_result$Contra`), indicating that an PD was elicited by targets. We saw no significant main effects of group (`r search.Retr.DTpd.results$full_result$Group2`) and training history (`r search.Retr.DTpd.results$full_result$GroupP`). We also saw no significant interactions between group and laterality (`r search.Retr.DTpd.results$full_result$Group2_Contra`), group and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP`), and laterality and training history (`r search.Retr.DTpd.results$full_result$GroupP_Contra`). There was no significant three-way interaction between group, laterality, and training history (`r search.Retr.DTpd.results$full_result$Group2_GroupP_Contra`).
 
 \newpage
 
