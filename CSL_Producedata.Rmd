@@ -282,7 +282,7 @@ distint.retr.aov <- aov_ez(data = distint.retr,
 ```
 
 ```{r saveBehavData}
-save(cat.acc.init.aov, cat.rt.init.aov, srch.acc.init.aov, srch.rt.init.aov,distint.init.aov, cat.acc.extd.aov, cat.rt.extd.aov, srch.acc.extd.aov, srch.rt.extd.aov, distint.extd.aov, distint.extd.posthoc, cat.acc.retr.aov, cat.rt.retr.aov, srch.acc.retr.aov, srch.rt.retr.aov, distint.retr.aov, srch.rt.init.fup, srch.rt.extd.initxComp.fup, srch.rt.extd.SessxComp.fup, file = "DataOutput/behavANOVAs.RData")
+save(cat.acc.init.aov, cat.rt.init.aov, srch.acc.init.aov, srch.rt.init.aov,distint.init.aov, cat.acc.extd.aov, cat.rt.extd.aov, srch.acc.extd.aov, srch.rt.extd.aov, distint.extd.aov, distint.extd.posthoc, cat.acc.retr.aov, cat.rt.retr.aov, srch.acc.retr.aov, srch.rt.retr.aov, distint.retr.aov, srch.rt.init.fup, srch.rt.extd.initxComp.fup, srch.rt.extd.SessxComp.fup, srch.rt.retr.fup, file = "DataOutput/behavANOVAs.RData")
 ```
 
 ```{r behavPlots}
