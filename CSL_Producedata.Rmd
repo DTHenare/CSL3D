@@ -120,7 +120,7 @@ cat.acc.init.aov <- aov_ez(data = cat.acc.init,
                             id = "Subject",
                             between = c("InitSess")
                             )
-cat.acc.init.t <- t.test()
+#cat.acc.init.t <- t.test()
 cat.rt.init <- behavData %>%
   filter(Procedure == "TaskL", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, LearnSearch.ACC == 1) %>%
   group_by(InitSess,Subject) %>%
@@ -150,6 +150,8 @@ srch.rt.init.aov <- aov_ez(data = srch.rt.init,
                            within = c("CompCond"),
                            between = c("InitSess")
                            )
+srch.rt.init.fup <- apa_print.emmGrid(pairs(emmeans(srch.rt.init.aov, ~CompCond|InitSess)))
+
 distint.init <- behavData %>%
   filter(Procedure == "TaskC", Session == 1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
   group_by(InitSess,CompCond,Subject) %>%
@@ -206,6 +208,8 @@ srch.rt.extd.aov <- aov_ez(data = srch.rt.extd,
                            within = c("Session","CompCond"),
                            between = c("InitSess")
                            )
+srch.rt.extd.initxComp.fup <- apa_print.emmGrid(pairs(emmeans(srch.rt.extd.aov, ~CompCond|InitSess)))
+srch.rt.extd.SessxComp.fup <- apa_print.emmGrid(pairs(emmeans(srch.rt.extd.aov, ~CompCond|Session)))
 
 distint.extd <- behavData %>%
   filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, InitSess == FinSess, CompSearch.ACC == 1) %>%
@@ -263,6 +267,7 @@ srch.rt.retr.aov <- aov_ez(data = srch.rt.retr,
                            within = c("CompCond"),
                            between = c("retrain","FinSess")
                            )
+srch.rt.retr.fup <- apa_print.emmGrid(pairs(emmeans(srch.rt.retr.aov, ~CompCond|FinSess)))
 distint.retr <- behavData %>%
   filter(Procedure == "TaskC", Session == 3, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff, CompSearch.ACC == 1) %>%
   group_by(FinSess,retrain,CompCond,Subject) %>%
@@ -277,7 +282,7 @@ distint.retr.aov <- aov_ez(data = distint.retr,
 ```
 
 ```{r saveBehavData}
-save(cat.acc.init.aov, cat.rt.init.aov, srch.acc.init.aov, srch.rt.init.aov,distint.init.aov, cat.acc.extd.aov, cat.rt.extd.aov, srch.acc.extd.aov, srch.rt.extd.aov, distint.extd.aov, distint.extd.posthoc, cat.acc.retr.aov, cat.rt.retr.aov, srch.acc.retr.aov, srch.rt.retr.aov, distint.retr.aov, file = "DataOutput/behavANOVAs.RData")
+save(cat.acc.init.aov, cat.rt.init.aov, srch.acc.init.aov, srch.rt.init.aov,distint.init.aov, cat.acc.extd.aov, cat.rt.extd.aov, srch.acc.extd.aov, srch.rt.extd.aov, distint.extd.aov, distint.extd.posthoc, cat.acc.retr.aov, cat.rt.retr.aov, srch.acc.retr.aov, srch.rt.retr.aov, distint.retr.aov, srch.rt.init.fup, srch.rt.extd.initxComp.fup, srch.rt.extd.SessxComp.fup, file = "DataOutput/behavANOVAs.RData")
 ```
 
 ```{r behavPlots}
@@ -295,7 +300,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
-ggsave("Figures/Behav1.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/Behav1.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -311,7 +316,7 @@ behavData %>%
   geom_errorbar(aes(ymin = ResponseTime-se, ymax = ResponseTime+se), width = .2) +
   coord_cartesian(ylim=c(400,800))+
   theme_apa()
-ggsave('Figures/Behav2.tiff', dpi = 600, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav2.tiff', dpi = 123, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -327,7 +332,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2, position=position_dodge(.9)) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
-ggsave('Figures/Behav3.tiff', dpi = 600, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav3.tiff', dpi = 123, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -346,7 +351,7 @@ behavData %>%
   theme_apa() +
   theme(#legend.position = "None",
         axis.line = element_line(colour = "black"))
-ggsave('Figures/Behav4.tiff', dpi = 600, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav4.tiff', dpi = 123, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1) %>%
@@ -665,7 +670,7 @@ save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.result
         facet_grid(.~Stimulus) +
         theme_apa() +
       theme(text = element_text(size=10))
-ggsave("Figures/lernInitERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernInitERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ### Extended training effects
@@ -808,7 +813,7 @@ learn.Extd.ShpPd.results <- apa_print(learn.Extd.ShpPd.aov)
 ```
 
 ```{r savelernExtdERPData}
-save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ShpNt.fup, learn.Extd.ShpNt.fup.ContraGroup1, learn.Extd.ShpNt.fup.ContraSession, file = "DataOutput/lernExtdERPANOVAs.RData")
+save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ShpNt.fup.ContraGroup1, learn.Extd.ShpNt.fup.ContraSession, file = "DataOutput/lernExtdERPANOVAs.RData")
 ```
 
 ```{r lernExtdERPPlot}
@@ -835,7 +840,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/lernExtdERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernExtdERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ### Retraining effects
@@ -1003,7 +1008,7 @@ allData %>%
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
           text = element_text(size=6))
-ggsave("Figures/lernRetrERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernRetrERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ## Search Task
@@ -1176,7 +1181,7 @@ allData %>%
     facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa() +
   theme(text = element_text(size=10))
-ggsave("Figures/SrchInitERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchInitERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ### Extended training effects
@@ -1350,7 +1355,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/SrchExtdERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchExtdERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ```{r srchExtdERPPlotNOSUB}
@@ -1377,7 +1382,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/SrchExtdERPsNOSUB.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchExtdERPsNOSUB.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
 ### Retraining effects
@@ -1548,6 +1553,6 @@ allData %>%
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
           text = element_text(size=6))
-ggsave("Figures/SrchRetrERPs.tiff", dpi = 600, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchRetrERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
 ```
 
