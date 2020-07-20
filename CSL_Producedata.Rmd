@@ -300,7 +300,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
-ggsave("Figures/Behav1.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/Behav1.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskL", Session != 2, LearnSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -316,7 +316,7 @@ behavData %>%
   geom_errorbar(aes(ymin = ResponseTime-se, ymax = ResponseTime+se), width = .2) +
   coord_cartesian(ylim=c(400,800))+
   theme_apa()
-ggsave('Figures/Behav2.tiff', dpi = 123, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav2.tiff', dpi = 300, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -332,7 +332,7 @@ behavData %>%
   geom_errorbar(aes(ymin = Accuracy-se, ymax = Accuracy+se), width = .2, position=position_dodge(.9)) +
   coord_cartesian(ylim=c(75,100))+
   theme_apa()
-ggsave('Figures/Behav3.tiff', dpi = 123, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav3.tiff', dpi = 300, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1, LearnSearch.RT < learnCutoff | CompSearch.RT < compCutoff) %>%
@@ -351,7 +351,7 @@ behavData %>%
   theme_apa() +
   theme(#legend.position = "None",
         axis.line = element_line(colour = "black"))
-ggsave('Figures/Behav4.tiff', dpi = 123, width = 16, height = 8, units = "cm")
+ggsave('Figures/Behav4.tiff', dpi = 300, width = 16, height = 8, units = "cm")
 
 behavData %>%
   filter(Procedure == "TaskC", Session != 2, CompSearch.ACC==1) %>%
@@ -670,7 +670,7 @@ save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.result
         facet_grid(.~Stimulus) +
         theme_apa() +
       theme(text = element_text(size=10))
-ggsave("Figures/lernInitERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernInitERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ### Extended training effects
@@ -840,7 +840,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/lernExtdERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernExtdERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ### Retraining effects
@@ -1008,7 +1008,7 @@ allData %>%
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
           text = element_text(size=6))
-ggsave("Figures/lernRetrERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/lernRetrERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ## Search Task
@@ -1181,7 +1181,7 @@ allData %>%
     facet_grid(.~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa() +
   theme(text = element_text(size=10))
-ggsave("Figures/SrchInitERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchInitERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ### Extended training effects
@@ -1355,7 +1355,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/SrchExtdERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchExtdERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ```{r srchExtdERPPlotNOSUB}
@@ -1382,7 +1382,7 @@ allData %>%
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
           legend.title = element_text( size = 4))
-ggsave("Figures/SrchExtdERPsNOSUB.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchExtdERPsNOSUB.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
 ### Retraining effects
@@ -1553,6 +1553,6 @@ allData %>%
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
           text = element_text(size=6))
-ggsave("Figures/SrchRetrERPs.tiff", dpi = 123, width = 16, height = 8, units = "cm")
+ggsave("Figures/SrchRetrERPs.tiff", dpi = 300, width = 16, height = 8, units = "cm")
 ```
 
