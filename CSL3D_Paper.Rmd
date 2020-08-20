@@ -169,7 +169,7 @@ When focussing on performance from Day1, independent samples t-tests showed no s
 
 #### Extended training.
 
-For participants whose categorisation task remained unchanged across the 3 days, a 2x2 mixed ANOVA evaluating the effects of group (colour vs shape) and session (Day1 vs Day3) on response times revealed no significant main effect of group across the task (`r apa_print(cat.rt.extd.aov)$full_result$InitSess`), however a significant main effect of session showed that repsonse times were slower on Day3 (`r apa_print(cat.rt.extd.aov)$full_result$Session`). There was no significant interaction between group and session (`r apa_print(cat.rt.extd.aov)$full_result$InitSess_Session`). 
+For participants whose categorisation task remained unchanged across the 3 days, a 2x2 mixed ANOVA evaluating the effects of group (colour vs shape) and session (Day1 vs Day3) on response times revealed no significant main effect of group across the task (`r apa_print(cat.rt.extd.aov)$full_result$InitSess`). A significant main effect of session, however, showed that response times were slower on Day3 (`r apa_print(cat.rt.extd.aov)$full_result$Session`). There was no significant interaction between group and session (`r apa_print(cat.rt.extd.aov)$full_result$InitSess_Session`) indicating that the RT difference was the same for both groups. 
 When this analysis was repeated for accuracy, we again saw no significant main effect of group (`r apa_print(cat.acc.extd.aov)$full_result$InitSess`), however a significant main effect of session revealed that participants became significantly less accurate by Day3 (`r apa_print(cat.acc.extd.aov)$full_result$Session`). There was no significant interaction between group and session (`r apa_print(cat.acc.extd.aov)$full_result$InitSess_Session`).
 
 #### Retraining.
@@ -216,19 +216,19 @@ This analysis was repeated using search task accuracy as the dependent variable.
 load('DataOutput/lernInitERPANOVAs.RData')
 ```
 
-(ref:lernInitERPcaption) ERPs from Day1. Colour singletons elicit significant lateralised positivty for the shape group, NT is not significant for colour group. PD is significant for the colour group. Shape singletons elicit an NT for the shape group but not the colour group, and a PD for both groups.
+(ref:lernInitERPcaption) ERPs from Day1. Colour singletons elicit significant lateralised positivity for the shape group, NT is not significant for colour group. PD is significant for the colour group. Shape singletons elicit an NT for the shape group but not the colour group, and a PD for both groups.
 
 ```{r loadlernInitPlot, fig.cap = "(ref:lernInitERPcaption)"}
 include_graphics("Figures/lernInitERPs.tiff", auto_pdf = FALSE)
 ```
 
-When focusing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate the effect of group (colour vs shape) and electrode laterality (contralateral vs ipsilateral) on ERP component amplitude in the categorisation task. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets int he presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
+When focusing on performance from Day1, a 2x2 mixed ANOVA was used to evaluate the effect of group (colour vs shape) and electrode laterality (contralateral vs ipsilateral) on ERP component amplitude in the categorisation task. This analysis was carried out for the NT elicited by targets in the distractor absent trials, the NT elicited by lateralised targets in the presence of a midline distractor, and for the PD elicited by lateralised distractors in the presence of midline targets.
 
 ##### Lateralised colour singleton
 
-The results showed a significant main effect of group on NT amplitude (`r learn.Init.ColNt.results$full_result$Group1`), however there was no main effect of electrode laterality (`r learn.Init.ColNt.results$full_result$Contra`). We did see an interaction between group and laterality (`r learn.Init.ColNt.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant positivity was elicited by colour singletons for participants in the shape group (`r learn.Init.ColNt.fup$full_result$Contralateral_Ipsilateral_S`) but no lateralised difference was detected for the colour group (`r learn.Init.ColNt.fup$full_result$Contralateral_Ipsilateral_C`).
+The results showed a significant main effect of group on NT amplitude (`r learn.Init.ColNt.results$full_result$Group1`), however there was no main effect of electrode laterality (`r learn.Init.ColNt.results$full_result$Contra`). We did see an interaction between group and laterality (`r learn.Init.ColNt.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed a significant positivity was elicited by colour singletons for participants in the shape group (`r learn.Init.ColNt.fup$full_result$Contralateral_Ipsilateral_S`) and a small, but non-significant negativity in the colour group (`r learn.Init.ColNt.fup$full_result$Contralateral_Ipsilateral_C`).
 
-The results for the PD time range showed no significant main effect of group on component amplitude (`r learn.Init.ColPd.results$full_result$Group1`), however there was a main effect of electrode laterality (`r learn.Init.ColPd.results$full_result$Contra`), and an interaction between group and laterality (`r learn.Init.ColPd.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed that the colour singleton elicited a significant PD for participants in the colour group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_C`), but no lateralised difference was detected for the shape group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_S`).
+The results for the PD time range showed no significant main effect of group on component amplitude (`r learn.Init.ColPd.results$full_result$Group1`), however there was a main effect of electrode laterality (`r learn.Init.ColPd.results$full_result$Contra`), and an interaction between group and laterality (`r learn.Init.ColPd.results$full_result$Group1_Contra`). Follow-up comparisons of this interaction showed that the colour singleton elicited a significant PD for participants in the colour group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_C`), and a smaller, non-significant positivity in the shape group (`r learn.Init.ColPd.fup$full_result$Contralateral_Ipsilateral_S`).
 
 ##### Lateralised shape singleton
 
