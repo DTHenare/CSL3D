@@ -835,7 +835,7 @@ allData %>%
     scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group1~Stimulus) +
+    facet_grid(Stimulus~Group1) +
     theme_apa()+
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
@@ -1003,7 +1003,7 @@ allData %>%
     scale_color_manual(values=c("orange4", "blue4","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group2~Stimulus) +
+    facet_grid(Stimulus~Group2) +
     theme_apa()+
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
@@ -1350,7 +1350,7 @@ allData %>%
     scale_color_manual(values=c("seagreen3", "red3","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group1~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    facet_grid(Stimulus~Group1, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa()+
     theme(text = element_text(size=10),
           legend.text = element_text( size = 4),
@@ -1548,7 +1548,7 @@ allData %>%
     scale_color_manual(values=c("orange4", "blue4","seagreen4", "red4"))+
     scale_x_continuous(name ="Latency (ms)", expand = c(0, 0), limits=c(-200, 500), breaks=seq(-200,500,200)) +
     scale_y_reverse(name =expression(paste("Amplitude (",mu,"v)")), expand = c(0, 0)) +
-    facet_grid(Group2~Stimulus, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
+    facet_grid(Stimulus~Group2, labeller = labeller(Stimulus = c("Target (None mid)" = "Target Only", "Target (Distractor mid)" = "Target","Distractor (Target mid)" = "Distractor"))) +
     theme_apa()+
     theme(legend.text = element_text( size = 4),
           legend.title = element_text( size = 4),
