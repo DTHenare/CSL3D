@@ -645,7 +645,7 @@ learn.Init.ShpPd.results <- apa_print(learn.Init.ShpPd.aov)
 ```
 
 ```{r savelernInitERPData}
-save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.results, learn.Init.ShpPd.results, learn.Init.ColNt.fup, learn.Init.ShpNt.fup, learn.Init.ColPd.fup, file = "DataOutput/lernInitERPANOVAs.RData")
+save(learn.Init.ColNt.results, learn.Init.ShpNt.results, learn.Init.ColPd.results, learn.Init.ShpPd.results, learn.Init.ColNt.fup, learn.Init.ShpNt.fup, learn.Init.ColPd.fup, learn.Init.ColNt.aov, learn.Init.ShpNt.aov, learn.Init.ColPd.aov, learn.Init.ShpPd.aov, file = "DataOutput/lernInitERPANOVAs.RData")
 ```
 
 ```{r lernInitERPPlot}
@@ -813,7 +813,7 @@ learn.Extd.ShpPd.results <- apa_print(learn.Extd.ShpPd.aov)
 ```
 
 ```{r savelernExtdERPData}
-save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ShpNt.fup.ContraGroup1, learn.Extd.ShpNt.fup.ContraSession, file = "DataOutput/lernExtdERPANOVAs.RData")
+save(learn.Extd.ColNt.results, learn.Extd.ShpNt.results, learn.Extd.ColPd.results, learn.Extd.ShpPd.results, learn.Extd.ShpNt.fup.ContraGroup1, learn.Extd.ShpNt.fup.ContraSession, learn.Extd.ColNt.aov, learn.Extd.ShpNt.aov, learn.Extd.ColPd.aov, learn.Extd.ShpPd.aov, file = "DataOutput/lernExtdERPANOVAs.RData")
 ```
 
 ```{r lernExtdERPPlot}
@@ -981,7 +981,7 @@ learn.Retr.ShpPd.results <- apa_print(learn.Retr.ShpPd.aov)
 ```
 
 ```{r savelernRetrERPData}
-save(learn.Retr.ColNt.results, learn.Retr.ShpNt.results, learn.Retr.ColPd.results, learn.Retr.ShpPd.results, learn.Retr.ColNt.fup,  file = "DataOutput/lernRetrERPANOVAs.RData")
+save(learn.Retr.ColNt.results, learn.Retr.ShpNt.results, learn.Retr.ColPd.results, learn.Retr.ShpPd.results, learn.Retr.ColNt.fup, learn.Retr.ColNt.aov, learn.Retr.ShpNt.aov, learn.Retr.ColPd.aov, learn.Retr.ShpPd.aov,  file = "DataOutput/lernRetrERPANOVAs.RData")
 ```
 
 ```{r lernRetrERPPlot}
@@ -1154,7 +1154,7 @@ search.Init.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Init.DTpd.aov, ~C
 ```
 
 ```{r saveSrchInitERPData}
-save(search.Init.TO.results, search.Init.TD.results, search.Init.DTnt.results, search.Init.DTpd.results, search.Init.TO.fup, search.Init.TD.fup, search.Init.DTpd.fup, file = "DataOutput/SrchInitERPANOVAs.RData")
+save(search.Init.TO.results, search.Init.TD.results, search.Init.DTnt.results, search.Init.DTpd.results, search.Init.TO.fup, search.Init.TD.fup, search.Init.DTpd.fup, search.Init.TO.aov, search.Init.TD.aov, search.Init.DTnt.aov, search.Init.DTpd.aov, file = "DataOutput/SrchInitERPANOVAs.RData")
 ```
 
 ```{r srchInitERPPlot}
@@ -1326,7 +1326,7 @@ search.Extd.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Extd.DTpd.aov, ~C
 ```
 
 ```{r saveSrchExtdERPData}
-save(search.Extd.TO.results, search.Extd.TD.results, search.Extd.DTnt.results, search.Extd.DTpd.results, search.Extd.TO.fup, search.Extd.TD.fup, search.Extd.DTnt.fup, search.Extd.DTpd.fup, file = "DataOutput/SrchExtdERPANOVAs.RData")
+save(search.Extd.TO.results, search.Extd.TD.results, search.Extd.DTnt.results, search.Extd.DTpd.results, search.Extd.TO.fup, search.Extd.TD.fup, search.Extd.DTnt.fup, search.Extd.DTpd.fup, search.Extd.TO.aov, search.Extd.TD.aov, search.Extd.DTnt.aov, search.Extd.DTpd.aov, file = "DataOutput/SrchExtdERPANOVAs.RData")
 ```
 
 ```{r srchExtdERPPlot}
@@ -1524,7 +1524,7 @@ search.Retr.DTpd.fup <- apa_print.emmGrid(pairs(emmeans(search.Retr.DTpd.aov, ~C
 ```
 
 ```{r saveSrchRetrERPData}
-save(search.Retr.TO.results, search.Retr.TD.results, search.Retr.DTnt.results, search.Retr.DTpd.results, file = "DataOutput/SrchRetrERPANOVAs.RData")
+save(search.Retr.TO.results, search.Retr.TD.results, search.Retr.DTnt.results, search.Retr.DTpd.results, search.Retr.TO.aov, search.Retr.TD.aov, search.Retr.DTnt.aov, search.Retr.DTpd.aov, file = "DataOutput/SrchRetrERPANOVAs.RData")
 ```
 
 ```{r srchRetrERPPlot}
